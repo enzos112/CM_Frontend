@@ -1,0 +1,8 @@
+/* Importar Bootstrap 5 */
+@import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+@import "../node_modules/bootstrap-icons/font/bootstrap-icons.css";
+
+/* Estilos Globales Extra (Opcional) */
+body {
+    background-color: #f8f9fa; /* Un gris muy suave, típico de sistemas médicos */
+}
