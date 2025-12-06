@@ -1,0 +1,157 @@
+<div class="container mt-5 mb-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-7">
+      <div class="card shadow">
+        <div class="card-body p-4">
+          <h2 class="text-center mb-4">Registro de Paciente</h2>
+          
+          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            
+            <h5 class="mb-3">Datos Personales</h5>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Nombres *</label>
+                <input type="text" class="form-control" formControlName="nombres"
+                       [class.is-invalid]="registerForm.get('nombres')?.invalid && registerForm.get('nombres')?.touched">
+                <div class="invalid-feedback">Nombres es obligatorio.</div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Apellido Paterno *</label>
+                <input type="text" class="form-control" formControlName="apellidoPaterno"
+                       [class.is-invalid]="registerForm.get('apellidoPaterno')?.invalid && registerForm.get('apellidoPaterno')?.touched">
+                <div class="invalid-feedback">Apellido Paterno es obligatorio.</div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Apellido Materno *</label>
+                <input type="text" class="form-control" formControlName="apellidoMaterno"
+                       [class.is-invalid]="registerForm.get('apellidoMaterno')?.invalid && registerForm.get('apellidoMaterno')?.touched">
+                <div class="invalid-feedback">Apellido Materno es obligatorio.</div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Fecha de Nacimiento *</label>
+                <input type="date" class="form-control" formControlName="fechaNacimiento" [max]="maxDate"
+                       [class.is-invalid]="registerForm.get('fechaNacimiento')?.invalid && registerForm.get('fechaNacimiento')?.touched">
+                <div class="invalid-feedback">Fecha de nacimiento es obligatoria y no puede ser futura.</div>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <label class="form-label">Tipo Documento *</label>
+                <select class="form-select" formControlName="tipoDocumento">
+                  <option *ngFor="let doc of tiposDocumento" [value]="doc.value">
+                    {{ doc.name }}
+                  </option>
+                </select>
+              </div>
+
+              <div class="col-md-4 mb-3">
+                <label class="form-label">N° Documento *</label>
+                <input type="text" class="form-control" formControlName="numeroDocumento" 
+                       [class.is-invalid]="registerForm.get('numeroDocumento')?.invalid && registerForm.get('numeroDocumento')?.touched">
+                <div class="invalid-feedback">Formato, longitud o tipo incorrecto.</div>
+              </div>
+
+              <div class="col-md-4 mb-3">
+                <label class="form-label">Género *</label>
+                <select class="form-select" formControlName="genero"
+                        [class.is-invalid]="registerForm.get('genero')?.invalid && registerForm.get('genero')?.touched">
+                  <option value="">Seleccione</option>
+                  <option *ngFor="let g of generos" [value]="g">
+                    {{ g === 'PREFIERO_NO_DECIRLO' ? 'Prefiero no decirlo' : g | titlecase }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            
+            <hr>
+
+            <h5 class="mb-3">Datos de Contacto y Cuenta</h5>
+            
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Correo Electrónico *</label>
+                <input type="email" class="form-control" formControlName="email" placeholder="ejemplo@correo.com"
+                       [class.is-invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+                <div class="invalid-feedback">Correo inválido o requerido.</div>
+              </div>
+              
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Celular *</label>
+                <input type="text" class="form-control" formControlName="telefonoMovil" placeholder="9 dígitos" maxlength="9"
+                       [class.is-invalid]="registerForm.get('telefonoMovil')?.invalid && registerForm.get('telefonoMovil')?.touched">
+                <div class="invalid-feedback">Celular es obligatorio (9 números).</div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Contraseña *</label>
+              <input type="password" class="form-control" formControlName="password"
+                     [class.is-invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+              <div class="invalid-feedback">Contraseña es obligatoria (mínimo 6 caracteres).</div>
+            </div>
+            
+            <hr>
+            
+            <h5 class="mb-3">Dirección del Domicilio</h5>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Región</label>
+                <input type="text" class="form-control" formControlName="region">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Provincia</label>
+                <input type="text" class="form-control" formControlName="provincia">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Distrito</label>
+                <input type="text" class="form-control" formControlName="distrito">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Dirección (Calle y N°)</label>
+                <input type="text" class="form-control" formControlName="direccionCalle">
+              </div>
+            </div>
+
+            <hr>
+
+            <h5 class="mb-3">Contacto de Emergencia (Opcional)</h5>
+            <div class="row">
+              
+              <div class="col-md-4 mb-3">
+                <label class="form-label">Nombres (Emergencia)</label>
+                <input type="text" class="form-control" formControlName="contactoEmergenciaNombres">
+              </div>
+              
+              <div class="col-md-4 mb-3">
+                <label class="form-label">Apellidos (Emergencia)</label>
+                <input type="text" class="form-control" formControlName="contactoEmergenciaApellidos">
+              </div>
+              
+              <div class="col-md-4 mb-3">
+                <label class="form-label">Teléfono (Emergencia)</label>
+                <input type="text" class="form-control" formControlName="contactoEmergenciaTelefono" maxlength="9">
+              </div>
+              
+            </div>
+            <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+            <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
+            <div class="d-grid gap-2 mt-4">
+              <button type="submit" class="btn btn-primary btn-lg" [disabled]="registerForm.invalid">
+                Registrarme
+                </button>
+              
+              <a routerLink="/login" class="btn btn-link text-decoration-none">
+                ¿Ya tienes cuenta? Inicia Sesión
+              </a>
+            </div>
+            </form>  
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

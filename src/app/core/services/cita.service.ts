@@ -1,28 +1,35 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root' // <--- ESTO ES VITAL para que funcione la inyección
 })
-export class CitaService { // <--- DEBE DECIR 'export class'
-  private apiUrl = 'http://localhost:8080/citas';
+export class CitaService {
+  private apiUrl = `${environment.apiUrl}`; // http://localhost:8080
 
   constructor(private http: HttpClient) { }
 
-  private getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token');
-    return new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    });
+  // 1. Obtener Catálogos para los Selects
+  getEspecialidades(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/catalogo/especialidades`);
   }
 
-  agendarCita(cita: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/agendar`, cita, { headers: this.getHeaders() });
+  getMedicos(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/catalogo/medicos`);
   }
 
-  listarMisCitas(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/mis-citas`, { headers: this.getHeaders() });
+  // 2. Agendar la Cita (La prueba que hiciste en Postman)
+  agendarCita(citaData: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/citas/agendar`, citaData);
+  }
+
+  // 3. Listar mis citas (Para el Dashboard futuro)
+  misCitas(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/citas/mis-citas`);
+  }
+  getHorariosOcupados(medicoId: number, fecha: string): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/citas/horarios-ocupados?medicoId=${medicoId}&fecha=${fecha}`);
   }
 }
