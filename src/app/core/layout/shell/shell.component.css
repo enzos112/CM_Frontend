@@ -1,0 +1,22 @@
+/* Estilos para el shell component */
+.text-teal {
+  color: #20c997; /* Azul petróleo */
+}
+
+.btn-teal {
+  background-color: #20c997;
+  border-color: #20c997;
+  color: white;
+}
+
+.btn-teal:hover {
+  background-color: #1aa179;
+  border-color: #1aa179;
+  color: white;
+}
+
+/* Aseguramos que el contenido tenga buen espaciado */
+.content-wrapper {
+  min-height: calc(100vh - 120px); /* Ajuste para header y footer */
+  padding: 20px 0;
+}
