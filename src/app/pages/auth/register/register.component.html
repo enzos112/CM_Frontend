@@ -1,157 +1,152 @@
-<div class="container mt-5 mb-5">
-  <div class="row justify-content-center">
-    <div class="col-md-8 col-lg-7">
-      <div class="card shadow">
-        <div class="card-body p-4">
-          <h2 class="text-center mb-4">Registro de Paciente</h2>
+<div class="register-page">
+  <div class="logo-container text-center mb-4">
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="me-2 d-inline-block align-middle">
+      <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#1D82A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M2 17L12 22L22 17" stroke="#1D82A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M2 12L12 17L22 12" stroke="#1D82A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div class="d-inline-block text-start align-middle lh-1">
+        <div style="color: #7f8c8d; font-size: 0.8rem;">Centro Médico</div>
+        <div style="color: #2c3e50; font-weight: 700; font-size: 1.1rem;">Huerta Robles</div>
+    </div>
+  </div>
+
+  <div class="register-card shadow-sm">
+    <h2 class="card-title mb-1">Crear una cuenta</h2>
+    <p class="card-subtitle text-muted mb-4">Sigue los pasos para completar tu registro.</p>
+
+    <div class="stepper-container mb-5">
+      <ng-container *ngFor="let step of [1,2,3,4,5]; let i = index">
+          <div class="step" [class.active]="currentStep >= step">
+            <div class="step-circle">{{ step }}</div>
+          </div>
+          <div class="step-line" [class.active]="currentStep > step" *ngIf="step < 5"></div>
+      </ng-container>
+    </div>
+    
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      
+      <div *ngIf="currentStep === 1">
+        <div class="mb-3">
+          <label class="form-label custom-label">Tipo de Documento</label>
+          <select class="form-select custom-input" formControlName="tipoDocumento">
+            <option *ngFor="let doc of tiposDocumento" [value]="doc.value">{{ doc.name }}</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label custom-label" 
+                 [class.text-danger]="registerForm.get('numeroDocumento')?.invalid && (registerForm.get('numeroDocumento')?.dirty || registerForm.get('numeroDocumento')?.touched)">
+            Número de Documento
+          </label>
+          <input type="text" class="form-control custom-input" formControlName="numeroDocumento" placeholder="Ingrese el número"
+                 [class.is-invalid]="registerForm.get('numeroDocumento')?.invalid && (registerForm.get('numeroDocumento')?.dirty || registerForm.get('numeroDocumento')?.touched)">
           
-          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-            
-            <h5 class="mb-3">Datos Personales</h5>
-
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label class="form-label">Nombres *</label>
-                <input type="text" class="form-control" formControlName="nombres"
-                       [class.is-invalid]="registerForm.get('nombres')?.invalid && registerForm.get('nombres')?.touched">
-                <div class="invalid-feedback">Nombres es obligatorio.</div>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label class="form-label">Apellido Paterno *</label>
-                <input type="text" class="form-control" formControlName="apellidoPaterno"
-                       [class.is-invalid]="registerForm.get('apellidoPaterno')?.invalid && registerForm.get('apellidoPaterno')?.touched">
-                <div class="invalid-feedback">Apellido Paterno es obligatorio.</div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label class="form-label">Apellido Materno *</label>
-                <input type="text" class="form-control" formControlName="apellidoMaterno"
-                       [class.is-invalid]="registerForm.get('apellidoMaterno')?.invalid && registerForm.get('apellidoMaterno')?.touched">
-                <div class="invalid-feedback">Apellido Materno es obligatorio.</div>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label class="form-label">Fecha de Nacimiento *</label>
-                <input type="date" class="form-control" formControlName="fechaNacimiento" [max]="maxDate"
-                       [class.is-invalid]="registerForm.get('fechaNacimiento')?.invalid && registerForm.get('fechaNacimiento')?.touched">
-                <div class="invalid-feedback">Fecha de nacimiento es obligatoria y no puede ser futura.</div>
-              </div>
-            </div>
-            
-            <div class="row">
-              <div class="col-md-4 mb-3">
-                <label class="form-label">Tipo Documento *</label>
-                <select class="form-select" formControlName="tipoDocumento">
-                  <option *ngFor="let doc of tiposDocumento" [value]="doc.value">
-                    {{ doc.name }}
-                  </option>
-                </select>
-              </div>
-
-              <div class="col-md-4 mb-3">
-                <label class="form-label">N° Documento *</label>
-                <input type="text" class="form-control" formControlName="numeroDocumento" 
-                       [class.is-invalid]="registerForm.get('numeroDocumento')?.invalid && registerForm.get('numeroDocumento')?.touched">
-                <div class="invalid-feedback">Formato, longitud o tipo incorrecto.</div>
-              </div>
-
-              <div class="col-md-4 mb-3">
-                <label class="form-label">Género *</label>
-                <select class="form-select" formControlName="genero"
-                        [class.is-invalid]="registerForm.get('genero')?.invalid && registerForm.get('genero')?.touched">
-                  <option value="">Seleccione</option>
-                  <option *ngFor="let g of generos" [value]="g">
-                    {{ g === 'PREFIERO_NO_DECIRLO' ? 'Prefiero no decirlo' : g | titlecase }}
-                  </option>
-                </select>
-              </div>
-            </div>
-            
-            <hr>
-
-            <h5 class="mb-3">Datos de Contacto y Cuenta</h5>
-            
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label class="form-label">Correo Electrónico *</label>
-                <input type="email" class="form-control" formControlName="email" placeholder="ejemplo@correo.com"
-                       [class.is-invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
-                <div class="invalid-feedback">Correo inválido o requerido.</div>
-              </div>
-              
-              <div class="col-md-6 mb-3">
-                <label class="form-label">Celular *</label>
-                <input type="text" class="form-control" formControlName="telefonoMovil" placeholder="9 dígitos" maxlength="9"
-                       [class.is-invalid]="registerForm.get('telefonoMovil')?.invalid && registerForm.get('telefonoMovil')?.touched">
-                <div class="invalid-feedback">Celular es obligatorio (9 números).</div>
-              </div>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label">Contraseña *</label>
-              <input type="password" class="form-control" formControlName="password"
-                     [class.is-invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
-              <div class="invalid-feedback">Contraseña es obligatoria (mínimo 6 caracteres).</div>
-            </div>
-            
-            <hr>
-            
-            <h5 class="mb-3">Dirección del Domicilio</h5>
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label class="form-label">Región</label>
-                <input type="text" class="form-control" formControlName="region">
-              </div>
-              <div class="col-md-6 mb-3">
-                <label class="form-label">Provincia</label>
-                <input type="text" class="form-control" formControlName="provincia">
-              </div>
-              <div class="col-md-6 mb-3">
-                <label class="form-label">Distrito</label>
-                <input type="text" class="form-control" formControlName="distrito">
-              </div>
-              <div class="col-md-6 mb-3">
-                <label class="form-label">Dirección (Calle y N°)</label>
-                <input type="text" class="form-control" formControlName="direccionCalle">
-              </div>
-            </div>
-
-            <hr>
-
-            <h5 class="mb-3">Contacto de Emergencia (Opcional)</h5>
-            <div class="row">
-              
-              <div class="col-md-4 mb-3">
-                <label class="form-label">Nombres (Emergencia)</label>
-                <input type="text" class="form-control" formControlName="contactoEmergenciaNombres">
-              </div>
-              
-              <div class="col-md-4 mb-3">
-                <label class="form-label">Apellidos (Emergencia)</label>
-                <input type="text" class="form-control" formControlName="contactoEmergenciaApellidos">
-              </div>
-              
-              <div class="col-md-4 mb-3">
-                <label class="form-label">Teléfono (Emergencia)</label>
-                <input type="text" class="form-control" formControlName="contactoEmergenciaTelefono" maxlength="9">
-              </div>
-              
-            </div>
-            <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
-            <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
-            <div class="d-grid gap-2 mt-4">
-              <button type="submit" class="btn btn-primary btn-lg" [disabled]="registerForm.invalid">
-                Registrarme
-                </button>
-              
-              <a routerLink="/login" class="btn btn-link text-decoration-none">
-                ¿Ya tienes cuenta? Inicia Sesión
-              </a>
-            </div>
-            </form>  
+          <div class="form-text text-danger mt-2 fw-bold" 
+               *ngIf="registerForm.get('numeroDocumento')?.invalid && (registerForm.get('numeroDocumento')?.dirty || registerForm.get('numeroDocumento')?.touched)">
+             El número de documento debe tener al menos {{ registerForm.get('tipoDocumento')?.value === 'DNI' ? '8' : 'los caracteres requeridos' }} caracteres.
+          </div>
         </div>
       </div>
-    </div>
+
+      <div *ngIf="currentStep === 2">
+        <div class="row">
+            <div class="col-12 mb-3"><label class="form-label custom-label">Nombres</label><input type="text" class="form-control custom-input" formControlName="nombres"></div>
+            <div class="col-md-6 mb-3"><label class="form-label custom-label">Apellido Paterno</label><input type="text" class="form-control custom-input" formControlName="apellidoPaterno"></div>
+            <div class="col-md-6 mb-3"><label class="form-label custom-label">Apellido Materno</label><input type="text" class="form-control custom-input" formControlName="apellidoMaterno"></div>
+            <div class="col-md-6 mb-3"><label class="form-label custom-label">Fecha Nacimiento</label><input type="date" class="form-control custom-input" formControlName="fechaNacimiento" [max]="maxDate"></div>
+            <div class="col-md-6 mb-3"><label class="form-label custom-label">Género</label>
+                <select class="form-select custom-input" formControlName="genero">
+                    <option *ngFor="let g of generos" [value]="g">{{ g | titlecase }}</option>
+                </select>
+            </div>
+        </div>
+      </div>
+
+      <div *ngIf="currentStep === 3">
+          <div class="mb-3"><label class="form-label custom-label">Celular</label><input type="text" class="form-control custom-input" formControlName="telefonoMovil" maxlength="9"></div>
+          <div class="mb-3"><label class="form-label custom-label">Email</label><input type="email" class="form-control custom-input" formControlName="email"></div>
+          <div class="mb-3"><label class="form-label custom-label">Contraseña</label><input type="password" class="form-control custom-input" formControlName="password"></div>
+          <div class="mb-3"><label class="form-label custom-label">Confirmar Contraseña</label><input type="password" class="form-control custom-input" formControlName="confirmPassword"></div>
+          <div class="mb-2 form-check">
+            <input type="checkbox" class="form-check-input" formControlName="acceptTerms">
+            <label class="form-check-label small">Acepto <a href="#" class="link-styled">Términos y Condiciones</a>.</label>
+          </div>
+          <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" formControlName="acceptConsent">
+            <label class="form-check-label small">Acepto el <a href="#" class="link-styled">Consentimiento de datos</a>.</label>
+          </div>
+      </div>
+
+      <div *ngIf="currentStep === 4">
+        <div class="mb-3">
+            <label class="form-label custom-label">Departamento</label>
+            <select class="form-select custom-input" formControlName="departamento">
+                <option value="">Seleccione</option>
+                <option *ngFor="let dep of departamentos" [value]="dep">{{ dep }}</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label custom-label">Provincia</label>
+            <select class="form-select custom-input" formControlName="provincia" [disabled]="!provincias.length">
+                <option value="">Seleccione</option>
+                <option *ngFor="let prov of provincias" [value]="prov">{{ prov }}</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label custom-label">Distrito</label>
+            <select class="form-select custom-input" formControlName="distrito" [disabled]="!distritos.length">
+                <option value="">Seleccione</option>
+                <option *ngFor="let dist of distritos" [value]="dist">{{ dist }}</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label custom-label">Dirección</label>
+            <input type="text" class="form-control custom-input" formControlName="direccion" placeholder="Ej. Av. Próceres de la Independencia 123">
+        </div>
+      </div>
+
+      <div *ngIf="currentStep === 5">
+        <div class="verification-box p-3 mb-4">
+            <div class="d-flex align-items-start">
+                <div class="me-2 mt-1">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2c3e50" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        <path d="M9 12l2 2 4-4"/>
+                    </svg>
+                </div>
+                <div>
+                    <h6 class="mb-1 fw-bold text-dark">Verificación Requerida</h6>
+                    <p class="mb-0 small text-muted">
+                        Código enviado: <strong>123456</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label custom-label">Código de Verificación</label>
+            <input type="text" class="form-control custom-input text-center letter-spacing-2" 
+                   formControlName="verificationCode" maxlength="6" 
+                   [class.is-invalid]="errorMessage && currentStep === 5">
+        </div>
+      </div>
+
+      <div *ngIf="errorMessage" class="alert alert-danger p-2 small mt-3 text-center">{{ errorMessage }}</div>
+      <div *ngIf="successMessage" class="alert alert-success p-2 small mt-3 text-center">{{ successMessage }}</div>
+
+      <div class="d-flex justify-content-between align-items-center mt-5 action-buttons">
+        <button type="button" class="btn btn-light border btn-back" (click)="prevStep()" *ngIf="currentStep > 1">← Atrás</button>
+        <div *ngIf="currentStep === 1"></div>
+        <button type="button" class="btn btn-primary btn-next text-white" (click)="nextStep()" *ngIf="currentStep < 5">Siguiente →</button>
+        
+        <button type="submit" class="btn btn-primary btn-next text-white" *ngIf="currentStep === 5" [disabled]="isLoading">
+            {{ isLoading ? 'Registrando...' : 'Finalizar Registro' }}
+        </button>
+      </div>
+      
+      <div class="text-center mt-4">
+        <a routerLink="/login" class="link-styled small">¿Ya tienes una cuenta? Inicia Sesión</a>
+      </div>
+    </form> 
   </div>
 </div>

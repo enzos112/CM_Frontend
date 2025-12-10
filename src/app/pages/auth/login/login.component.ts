@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-// RUTA CORREGIDA: Subimos tres niveles
 import { AuthService } from '../../../core/services/auth.service'; 
 
 @Component({
@@ -21,8 +20,9 @@ export class LoginComponent {
     private authService: AuthService,
     private router: Router
   ) {
+    // CAMBIO IMPORTANTE: Cambié 'email' por 'documento' según el diseño visual
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      documento: ['', [Validators.required]], // Quitamos Validators.email si es un DNI/RUC
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
@@ -30,14 +30,13 @@ export class LoginComponent {
   onSubmit() {
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.value).subscribe({
-        // TIPADO CORREGIDO
         next: (response: any) => { 
           this.authService.saveToken(response.token);
           this.router.navigate(['/intranet/dashboard']); 
         },
-        // TIPADO CORREGIDO
         error: (error: any) => { 
-          this.errorMessage = 'Credenciales incorrectas o error de servidor';
+          // Manejo de error más amigable
+          this.errorMessage = 'Credenciales incorrectas. Verifique su documento y contraseña.';
         }
       });
     } else {
