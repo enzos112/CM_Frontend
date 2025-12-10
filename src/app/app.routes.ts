@@ -8,6 +8,9 @@ import { RegisterComponent } from './pages/auth/register/register.component';
 import { HomeComponent } from './pages/public/home/home.component';
 import { EspecialidadesComponent } from './pages/public/especialidades/especialidades.component';
 import { MedicosPublicoComponent } from './pages/public/medicos/medicos.component';
+import { NosotrosComponent } from './pages/public/nosotros/nosotros.component';
+import { BlogComponent } from './pages/public/blog/blog.component';
+import { ContactoComponent } from './pages/public/contacto/contacto.component';
 import { ShellComponent } from './core/layout/shell/shell.component';
 
 // --- Capa INTRANET ---
@@ -25,8 +28,11 @@ export const routes: Routes = [
     path: 'app',
     component: ShellComponent,
     children: [
+      { path: 'nosotros', component: NosotrosComponent },
       { path: 'especialidades', component: EspecialidadesComponent },
       { path: 'medicos', component: MedicosPublicoComponent },
+      { path: 'blog', component: BlogComponent },
+      { path: 'contacto', component: ContactoComponent },
       {
         path: 'intranet',
         children: [
