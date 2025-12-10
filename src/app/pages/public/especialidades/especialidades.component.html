@@ -1,9 +1,30 @@
-<div class="container mt-5">
-    <h2>Especialidades Médicas</h2>
-    <p>Listado de especialidades ofrecidas en CMHR.</p>
-    <ul class="list-group">
-        <li class="list-group-item">Cardiología</li>
-        <li class="list-group-item">Pediatría</li>
-        <li class="list-group-item">Medicina General</li>
-    </ul>
+<div class="specialties-page">
+  <div class="container-xxl">
+    
+    <div class="header-section text-center">
+      <h2 class="page-title">Nuestras Especialidades</h2>
+      <p class="page-subtitle">
+        Un equipo multidisciplinario dedicado a ofrecerte una atención integral y personalizada en cada etapa de tu vida.
+      </p>
+    </div>
+
+    <div class="specialties-grid">
+      <ng-container *ngFor="let s of specialties">
+        <div class="spec-card">
+          <div class="spec-icon-box">
+            <i class="bi {{s.icon}}"></i>
+          </div>
+          
+          <div class="spec-content">
+            <h5 class="spec-title">{{ s.title }}</h5>
+            <p class="spec-desc">{{ s.desc }}</p>
+            <a href="#" class="spec-link">
+              Agendar Cita <i class="bi bi-arrow-right-short"></i>
+            </a>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+
+  </div>
 </div>
