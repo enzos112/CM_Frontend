@@ -1,51 +1,60 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+// Borramos RouterLink de aquí porque no se usa en el HTML
+
+interface BlogPost {
+  title: string;
+  excerpt?: string;
+  date: string;
+  category: string;
+  image: string;
+}
 
 @Component({
   selector: 'app-blog',
   standalone: true,
-  imports: [CommonModule, RouterLink],
-  template: `
-    <section class="py-5">
-      <div class="container">
-        <p class="text-uppercase text-primary fw-semibold mb-2">Blog</p>
-        <h1 class="fw-bold mb-4">Notas de salud y bienestar</h1>
-
-        <div class="row g-4">
-          <div class="col-md-4" *ngFor="let post of posts">
-            <div class="card h-100 shadow-sm">
-              <div class="card-body d-flex flex-column">
-                <p class="text-primary fw-semibold mb-2">{{ post.category }}</p>
-                <h5 class="card-title">{{ post.title }}</h5>
-                <p class="card-text text-muted">{{ post.excerpt }}</p>
-                <a class="mt-auto text-decoration-none fw-semibold" routerLink="/app/intranet/agendar-cita">
-                  Leer más
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  `
+  imports: [CommonModule], /* <--- Aquí quitamos RouterLink */
+  templateUrl: './blog.component.html',
+  styleUrls: ['./blog.component.css']
 })
 export class BlogComponent {
-  protected readonly posts = [
+  
+  posts: BlogPost[] = [
     {
-      category: 'Prevención',
-      title: 'Chequeos preventivos anuales',
-      excerpt: 'Qué exámenes priorizar según edad y antecedentes familiares.'
+      title: '5 Hábitos Diarios para un Corazón Más Sano',
+      excerpt: 'Pequeños cambios en tu rutina pueden tener un gran impacto en tu salud cardiovascular. Descubre cuáles son.',
+      date: '15 de Julio, 2024',
+      category: 'Cardiología',
+      image: 'https://images.unsplash.com/photo-1511174511562-5f7f18b874f8?auto=format&fit=crop&w=1200&q=80'
     },
     {
-      category: 'Estilo de vida',
-      title: 'Hábitos que fortalecen tu salud cardiovascular',
-      excerpt: 'Rutinas simples para cuidar tu corazón día a día.'
+      title: 'La Importancia de la Vacunación Infantil',
+      excerpt: 'Protege a tus hijos y a la comunidad. Aclaramos mitos y respondemos a las preguntas más frecuentes sobre vacunas.',
+      date: '10 de Julio, 2024',
+      category: 'Pediatría',
+      image: 'https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?q=80&w=800&auto=format&fit=crop'
     },
     {
-      category: 'Familia',
-      title: 'Vacunación y cuidado pediátrico',
-      excerpt: 'Recomendaciones para mantener al día el calendario de vacunas.'
+      title: 'Protección Solar: ¿Por Qué es Importante Todo el Año?',
+      excerpt: 'El sol no descansa en invierno. Te explicamos por qué debes usar protector solar incluso en días nublados.',
+      date: '5 de Julio, 2024',
+      category: 'Dermatología',
+      image: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?q=80&w=800&auto=format&fit=crop'
+    }
+  ];
+
+  featured: BlogPost[] = [
+    {
+      title: 'La Importancia de la Vacunación Infantil',
+      date: '10 de Julio, 2024',
+      category: 'Pediatría',
+      image: 'https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?q=80&w=200&auto=format&fit=crop'
+    },
+    {
+      title: 'Protección Solar: ¿Por Qué es Importante Todo el Año?',
+      date: '5 de Julio, 2024',
+      category: 'Dermatología',
+      image: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?q=80&w=200&auto=format&fit=crop'
     }
   ];
 }

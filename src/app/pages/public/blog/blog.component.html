@@ -1,0 +1,49 @@
+<div class="blog-page">
+  <div class="container-xxl">
+    
+    <header class="page-header text-center">
+      <h1 class="page-title">Blog</h1>
+      <p class="page-subtitle">
+        Mantente informado con nuestros artículos sobre prevención, cuidados y novedades en el mundo de la medicina.
+      </p>
+    </header>
+
+    <div class="blog-layout">
+      
+      <main class="main-column">
+        <article class="blog-card" *ngFor="let post of posts">
+          <div class="card-img-wrapper">
+            <img [src]="post.image" [alt]="post.title">
+          </div>
+          
+          <div class="card-content">
+            <span class="badge-category">{{ post.category }}</span>
+            <h2 class="card-title">{{ post.title }}</h2>
+            <p class="card-excerpt">{{ post.excerpt }}</p>
+            <span class="card-date">{{ post.date }}</span>
+          </div>
+        </article>
+      </main>
+
+      <aside class="sidebar-column">
+        <h3 class="sidebar-title">Noticias destacadas</h3>
+        <div class="sidebar-divider"></div>
+
+        <div class="sidebar-list">
+          <div class="sidebar-item" *ngFor="let item of featured">
+            <div class="sidebar-img">
+              <img [src]="item.image" [alt]="item.title">
+            </div>
+            <div class="sidebar-content">
+              <span class="badge-category small">{{ item.category }}</span>
+              <h5 class="sidebar-item-title">{{ item.title }}</h5>
+              <span class="card-date">{{ item.date }}</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+
+  </div>
+</div>
