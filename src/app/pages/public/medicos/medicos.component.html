@@ -1,9 +1,58 @@
-<div class="container mt-5">
-    <h2>Especialidades Médicas</h2>
-    <p>Listado de especialidades ofrecidas en CMHR.</p>
-    <ul class="list-group">
-        <li class="list-group-item">Cardiología</li>
-        <li class="list-group-item">Pediatría</li>
-        <li class="list-group-item">Medicina General</li>
-    </ul>
+<div class="medicos-page">
+  <div class="container-xxl">
+
+    <div class="page-header text-center">
+      <h2 class="title">Nuestro Equipo Médico</h2>
+      <p class="subtitle">
+        Profesionales apasionados por la medicina y comprometidos con tu bienestar. 
+        Conoce a los expertos que cuidarán de ti.
+      </p>
+    </div>
+
+    <div class="main-panel">
+      
+      <div class="tabs-header">
+        @for (spec of specialties; track spec) {
+          <button 
+            class="tab-btn" 
+            [class.active]="activeTab === spec"
+            (click)="setActiveTab(spec)">
+            {{ spec }}
+          </button>
+        }
+      </div>
+
+      <div class="tabs-content">
+        
+        @for (doc of filteredDoctors; track doc.id) {
+          <div class="doctor-card">
+            
+            <div class="doc-info">
+              <span class="doc-specialty">{{ doc.specialty }}</span>
+              <h5 class="doc-name">{{ doc.name }}</h5>
+              <p class="doc-role text-muted mb-0" style="font-size: 0.9rem;">{{ doc.role }}</p>
+            </div>
+
+            <div class="doc-actions">
+              <button class="btn-icon" title="Más información">
+                <i class="bi bi-info-circle"></i>
+              </button>
+              <button class="btn-reservar">
+                Reservar cita
+              </button>
+            </div>
+
+          </div>
+        } @empty {
+          <div class="text-center py-5 text-muted">
+            <i class="bi bi-people fs-1 d-block mb-3"></i>
+            <p>Próximamente agregaremos especialistas en esta área.</p>
+          </div>
+        }
+
+      </div>
+
+    </div>
+
+  </div>
 </div>

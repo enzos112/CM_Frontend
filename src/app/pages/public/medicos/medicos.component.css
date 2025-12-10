@@ -1,0 +1,172 @@
+.medicos-page {
+  background-color: #f4f9fc; /* Fondo gris muy claro/azulado */
+  min-height: 100vh;
+  padding: 80px 0;
+}
+
+/* Header */
+.page-header {
+  max-width: 800px;
+  margin: 0 auto 50px auto;
+}
+
+.title {
+  color: #148bb0;
+  font-weight: 800;
+  font-size: 2.2rem;
+  margin-bottom: 16px;
+}
+
+.subtitle {
+  color: #5c6670;
+  font-size: 1.05rem;
+}
+
+/* Panel Principal */
+.main-panel {
+  background: transparent;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* --- TABS SYSTEM --- */
+.tabs-header {
+  display: flex;
+  background-color: #e9ecef; /* Color gris de las pestañas inactivas */
+  border-radius: 12px 12px 0 0;
+  overflow: hidden;
+  padding: 4px 4px 0 4px; /* Espacio para que respire */
+}
+
+.tab-btn {
+  flex: 1; /* Ocupan todo el ancho disponible equitativamente */
+  border: none;
+  background: transparent;
+  padding: 16px 10px;
+  font-weight: 600;
+  color: #6c757d;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 8px 8px 0 0;
+  font-size: 1rem;
+}
+
+.tab-btn:hover {
+  background-color: rgba(255,255,255,0.5);
+  color: #148bb0;
+}
+
+/* Estilo para la pestaña activa */
+.tab-btn.active {
+  background-color: #fff;
+  color: #243238;
+  font-weight: 700;
+  box-shadow: 0 -4px 10px rgba(0,0,0,0.03);
+}
+
+/* --- CONTENT AREA --- */
+.tabs-content {
+  background: #fff;
+  min-height: 300px;
+  border-radius: 0 0 12px 12px; /* Redondeado solo abajo */
+  padding: 40px;
+  box-shadow: 0 10px 30px rgba(16, 69, 97, 0.05);
+}
+
+/* --- DOCTOR CARD --- */
+.doctor-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #eef2f5;
+  border-radius: 12px;
+  padding: 24px 32px;
+  margin-bottom: 20px;
+  background: #fff;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.doctor-card:hover {
+  border-color: #dbe4ea;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+  transform: translateY(-2px);
+}
+
+/* Info Izquierda */
+.doc-specialty {
+  display: inline-block;
+  font-size: 0.85rem;
+  color: #9aa0a6;
+  font-weight: 600;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.doc-name {
+  color: #243238;
+  font-weight: 700;
+  font-size: 1.2rem;
+  margin-bottom: 0;
+}
+
+/* Acciones Derecha */
+.doc-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.btn-icon {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: #b0bec5;
+  cursor: pointer;
+  transition: color 0.2s;
+  padding: 0;
+  line-height: 1;
+}
+
+.btn-icon:hover {
+  color: #148bb0;
+}
+
+.btn-reservar {
+  background-color: #148bb0;
+  color: #fff;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn-reservar:hover {
+  background-color: #0f7a9b;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .doctor-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  
+  .doc-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .tabs-header {
+    overflow-x: auto; /* Scroll horizontal en móviles si hay muchas especialidades */
+    white-space: nowrap;
+  }
+  
+  .tab-btn {
+    min-width: 120px;
+  }
+}
