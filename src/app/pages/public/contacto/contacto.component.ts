@@ -1,50 +1,43 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+interface FaqItem {
+  question: string;
+  answer: string;
+  isOpen: boolean;
+}
+
 @Component({
   selector: 'app-contacto',
   standalone: true,
   imports: [CommonModule],
-  template: `
-    <section class="py-5">
-      <div class="container">
-        <p class="text-uppercase text-primary fw-semibold mb-2">Contacto</p>
-        <h1 class="fw-bold mb-4">Estamos para ayudarte</h1>
-
-        <div class="row g-4">
-          <div class="col-md-6">
-            <div class="p-3 border rounded-3 bg-white h-100">
-              <h5 class="fw-bold mb-3">Información</h5>
-              <p class="mb-2 text-muted">Av. Principal 123, Lima, Perú</p>
-              <p class="mb-2 text-muted">citas@huertarobles.com</p>
-              <p class="mb-0 text-muted">(01) 555-1234</p>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="p-3 border rounded-3 bg-white h-100">
-              <h5 class="fw-bold mb-3">Envíanos un mensaje</h5>
-              <form class="row g-3">
-                <div class="col-12">
-                  <label class="form-label">Nombre</label>
-                  <input class="form-control" type="text" placeholder="Tu nombre">
-                </div>
-                <div class="col-12">
-                  <label class="form-label">Correo</label>
-                  <input class="form-control" type="email" placeholder="nombre@ejemplo.com">
-                </div>
-                <div class="col-12">
-                  <label class="form-label">Mensaje</label>
-                  <textarea class="form-control" rows="3" placeholder="Cuéntanos en qué podemos ayudarte"></textarea>
-                </div>
-                <div class="col-12">
-                  <button type="button" class="btn btn-primary w-100">Enviar</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  `
+  templateUrl: './contacto.component.html',
+  styleUrls: ['./contacto.component.css']
 })
-export class ContactoComponent { }
+export class ContactoComponent {
+  
+  // Datos para los desplegables (FAQs)
+  faqs: FaqItem[] = [
+    {
+      question: '¿Cómo puedo reprogramar mi cita?',
+      answer: 'Puedes reprogramar tu cita ingresando a tu cuenta en la sección "Mis Citas" o llamando a nuestra central telefónica con 24 horas de anticipación.',
+      isOpen: false
+    },
+    {
+      question: '¿Cómo veo los resultados de mis análisis?',
+      answer: 'Los resultados estarán disponibles en tu perfil en línea 48 horas después de la toma de muestra. Te llegará un correo de notificación.',
+      isOpen: false
+    }
+  ];
+
+  // Función para abrir/cerrar preguntas
+  toggleFaq(index: number): void {
+    this.faqs[index].isOpen = !this.faqs[index].isOpen;
+  }
+
+  // Simulación de envío
+  enviarConsulta(event: Event): void {
+    event.preventDefault();
+    alert('Consulta enviada correctamente (Simulación)');
+  }
+}
