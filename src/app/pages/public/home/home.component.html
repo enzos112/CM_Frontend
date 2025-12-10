@@ -1,10 +1,180 @@
-<div class="container mt-5">
-    <h1>Bienvenido al Centro Médico Huerta Robles</h1>
-    <p class="lead">Portal de atención al paciente y gestión de citas.</p>
-    
-    <div class="d-grid gap-2 col-8 mx-auto">
-      <a routerLink="/intranet/agendar-cita" class="btn btn-success btn-lg">Agendar Cita Ahora</a>
-      <a routerLink="/login" class="btn btn-outline-secondary">Acceso a Intranet / Dashboard</a>
-      <a routerLink="/citas" class="btn btn-outline-info">Ver Opciones de Citas</a>
+<div class="home-page">
+  <header class="topbar border-bottom">
+    <div class="container-xxl d-flex align-items-center justify-content-between py-2 gap-3">
+      <div class="brand d-flex align-items-center gap-2">
+        <div class="brand-mark d-flex align-items-center justify-content-center">
+          <i class="bi bi-stack"></i>
+        </div>
+        <div class="brand-text">
+          <div class="brand-overline">Centro Médico</div>
+          <div class="brand-title">Huerta Robles</div>
+        </div>
+      </div>
+
+      <nav class="d-none d-lg-flex align-items-center gap-4">
+        <span class="nav-icon"><i class="bi bi-brightness-high"></i></span>
+        <a class="nav-link px-0" routerLink="/app/nosotros">Nosotros</a>
+        <a class="nav-link px-0" routerLink="/app/especialidades">Especialidades</a>
+        <a class="nav-link px-0" routerLink="/app/medicos">Médicos</a>
+        <a class="nav-link px-0" routerLink="/app/blog">Blog</a>
+        <a class="nav-link px-0" routerLink="/app/contacto">Contacto</a>
+      </nav>
+
+      <div class="d-none d-lg-flex align-items-center gap-3 topbar-actions">
+        <span class="nav-divider"></span>
+        <a class="btn btn-ghost" routerLink="/login">Iniciar sesión</a>
+        <a class="btn btn-light border register-btn" routerLink="/register">Registrarme</a>
+        <a class="btn btn-primary cta header-cta" routerLink="/app/intranet/agendar-cita">Agendar Cita</a>
+      </div>
+
+      <button class="btn btn-outline-secondary d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileNav">
+        <i class="bi bi-list"></i>
+      </button>
     </div>
+  </header>
+
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="mobileNav">
+    <div class="offcanvas-header">
+      <h5 class="mb-0">Menú</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body d-flex flex-column gap-3">
+      <a class="nav-link" routerLink="/app/nosotros">Nosotros</a>
+      <a class="nav-link" routerLink="/app/especialidades">Especialidades</a>
+      <a class="nav-link" routerLink="/app/medicos">Médicos</a>
+      <a class="nav-link" routerLink="/app/blog">Blog</a>
+      <a class="nav-link" routerLink="/app/contacto">Contacto</a>
+      <hr>
+      <a class="btn btn-ghost w-100" routerLink="/login">Iniciar sesión</a>
+      <a class="btn btn-light border w-100" routerLink="/register">Registrarme</a>
+      <a class="btn btn-primary cta w-100" routerLink="/app/intranet/agendar-cita">Agendar Cita</a>
+    </div>
+  </div>
+
+  <main class="hero container-xxl">
+    <div class="row align-items-center g-5 flex-column flex-lg-row">
+      <div class="col-lg-6">
+        <h1 class="display-4 fw-bold hero-title lh-1 mb-4">Salud y bienestar, a tu alcance</h1>
+        <p class="lead hero-lead fs-5 mb-4">
+          Cuidamos de ti y tu familia con un equipo de expertos y tecnología de punta.
+          Agenda tu cita en línea de forma rápida y sencilla.
+        </p>
+        <a routerLink="/app/intranet/agendar-cita" class="btn btn-primary btn-lg cta hero-cta">
+          Agendar una Cita <i class="bi bi-arrow-right ms-2"></i>
+        </a>
+      </div>
+      <div class="col-lg-6">
+        <div class="hero-image card border-0 shadow-sm overflow-hidden">
+          <img
+            src="https://images.unsplash.com/photo-1516549655169-df83a0774514?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80"
+            alt="Doctor analizando radiografías"
+            class="img-fluid w-100"
+          >
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <section class="specialties">
+    <div class="container-xxl">
+      <div class="text-center mb-5">
+        <h2 class="specialties-title">Nuestras Especialidades</h2>
+        <p class="specialties-subtitle">
+          Ofrecemos una amplia gama de especialidades médicas para cubrir todas tus necesidades de salud.
+        </p>
+      </div>
+
+      <div class="specialties-grid">
+        <div class="specialty-card">
+          <div class="icon-wrapper"><i class="bi bi-heart-pulse"></i></div>
+          <h3>Cardiología</h3>
+          <p>Diagnóstico y tratamiento de enfermedades del corazón.</p>
+        </div>
+        <div class="specialty-card">
+          <div class="icon-wrapper"><i class="bi bi-emoji-smile"></i></div>
+          <h3>Pediatría</h3>
+          <p>Atención médica integral para niños y adolescentes.</p>
+        </div>
+        <div class="specialty-card">
+          <div class="icon-wrapper"><i class="bi bi-sun"></i></div>
+          <h3>Dermatología</h3>
+          <p>Cuidado de la piel, cabello y uñas.</p>
+        </div>
+        <div class="specialty-card">
+          <div class="icon-wrapper"><i class="bi bi-egg-fried"></i></div>
+          <h3>Nutrición</h3>
+          <p>Asesoramiento para una alimentación saludable y equilibrada.</p>
+        </div>
+        <div class="specialty-card">
+          <div class="icon-wrapper"><i class="bi bi-shield-plus"></i></div>
+          <h3>Ginecología</h3>
+          <p>Salud integral de la mujer y sistema reproductivo.</p>
+        </div>
+        <div class="specialty-card">
+          <div class="icon-wrapper"><i class="bi bi-clipboard2-pulse"></i></div>
+          <h3>Medicina General</h3>
+          <p>Atención primaria y diagnóstico general para toda la familia.</p>
+        </div>
+        <div class="specialty-card">
+          <div class="icon-wrapper"><i class="bi bi-cpu"></i></div>
+          <h3>Neurología</h3>
+          <p>Estudio y tratamiento de los trastornos del sistema nervioso.</p>
+        </div>
+      </div>
+
+      <div class="text-center mt-4">
+        <a class="btn btn-primary cta specialties-cta" routerLink="/app/especialidades">
+          Ver todas las especialidades <i class="bi bi-arrow-right ms-2"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <a
+    class="whatsapp-fab"
+    href="https://wa.me/51999999999"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Contáctanos por WhatsApp"
+  >
+    <i class="bi bi-whatsapp"></i>
+    <span>Contáctanos</span>
+  </a>
+
+  <footer class="footer">
+    <div class="container-xxl">
+      <div class="row g-4">
+        <div class="col-12 col-md-6 col-lg-3">
+          <h5 class="footer-title">Centro Médico Huerta Robles</h5>
+          <p class="footer-text">
+            Ofreciendo atención médica de calidad con un equipo de profesionales comprometidos con tu bienestar.
+          </p>
+        </div>
+        <div class="col-6 col-lg-2">
+          <h6 class="footer-subtitle">Navegación</h6>
+          <ul class="footer-links">
+            <li><a routerLink="/app/nosotros">Nosotros</a></li>
+            <li><a routerLink="/app/especialidades">Especialidades</a></li>
+            <li><a routerLink="/app/medicos">Médicos</a></li>
+            <li><a routerLink="/app/blog">Blog</a></li>
+          </ul>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3">
+          <h6 class="footer-subtitle">Contacto</h6>
+          <p class="footer-text mb-1">Av. Principal 123, Lima, Perú</p>
+          <p class="footer-text mb-1">citas@huertarobles.com</p>
+          <p class="footer-text mb-0">(01) 555-1234</p>
+        </div>
+        <div class="col-6 col-lg-2">
+          <h6 class="footer-subtitle">Horario de Atención</h6>
+          <p class="footer-text mb-1">Atención 24/7</p>
+          <p class="footer-text mb-0">Todos los días, incluyendo feriados.</p>
+        </div>
+      </div>
+      <hr>
+      <div class="footer-bottom text-center">
+        © 2025 Centro Médico Huerta Robles. Todos los derechos reservados.
+      </div>
+    </div>
+  </footer>
 </div>

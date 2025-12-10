@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -26,10 +26,10 @@ import { RouterLink } from '@angular/router';
               <a class="nav-link" routerLink="/citas" routerLinkActive="active">Servicios</a>
             </li>
           </ul>
-          
+
           <div class="d-flex">
             <a routerLink="/intranet/agendar-cita" class="btn btn-success me-2">Agendar Cita</a>
-            
+
             <a routerLink="/login" class="btn btn-outline-light">Acceder</a>
           </div>
         </div>

@@ -1,0 +1,124 @@
+<div class="about-page">
+  <section class="about-hero">
+    <div class="hero-center">
+      <p class="section-eyebrow">Nosotros</p>
+      <h1 class="hero-title">Cuidamos de ti y tu familia</h1>
+      <p class="hero-lead">
+        Más que un centro médico, somos una familia dedicada al cuidado de tu salud y la de tus seres queridos.
+        Conoce nuestra historia y compromiso.
+      </p>
+    </div>
+  </section>
+
+  <section class="about-content">
+    <div class="cards-row">
+      <div class="info-card">
+        <h5 class="card-title">Nuestra Historia</h5>
+        <p>
+          Fundado en 2010 por los doctores Alejandro Huerta y Carolina Robles, nuestro centro nació con el
+          sueño de ofrecer una atención médica accesible, moderna y, sobre todo, humana.
+        </p>
+        <p>
+          Lo que comenzó como un pequeño consultorio ha crecido hasta convertirse en un referente de salud en
+          la región, gracias a la confianza de miles de pacientes y al incansable trabajo de nuestro equipo.
+        </p>
+      </div>
+      <div class="info-card">
+        <h5 class="card-title">Misión y Visión</h5>
+        <div class="card-sub">
+          <span class="card-subtitle mission">Misión</span>
+          <p>
+            Proporcionar atención médica integral y de alta calidad, centrada en el paciente y su familia,
+            promoviendo la salud y el bienestar en nuestra comunidad.
+          </p>
+        </div>
+        <div class="card-sub">
+          <span class="card-subtitle vision">Visión</span>
+          <p>
+            Ser el centro médico líder en la región, reconocido por nuestra innovación, la tecnología de
+            vanguardia y un enfoque personalizado que empodera a nuestros pacientes.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+    <section class="values-section py-5">
+  <div class="container-xxl text-center">
+    <h3 class="section-title mb-4">Nuestros Valores</h3>
+    <div class="values-row">
+      <ng-container *ngFor="let v of values">
+        <div class="value-card text-center">
+          <div class="value-icon mb-3"><i class="bi {{v.icon}}"></i></div>
+          <h6 class="value-title mb-2">{{ v.title }}</h6>
+          <p class="value-desc mb-0">{{ v.desc }}</p>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</section>
+
+<section class="team-section py-5">
+  <div class="container-xxl text-center">
+    <h3 class="section-title mb-2">Conoce a Nuestro Equipo</h3>
+    <p class="section-subtitle mb-4">Un equipo de profesionales dedicados a brindarte la mejor atención.</p>
+    <div class="team-row">
+      <ng-container *ngFor="let t of team">
+        <div class="team-card text-center">
+          <div class="team-avatar mb-3">
+            <ng-container *ngIf="t.img; else initialsTpl">
+              <img [src]="t.img" [alt]="t.name" />
+            </ng-container>
+            <ng-template #initialsTpl>
+              <div class="avatar-initials">{{ t.initials }}</div>
+            </ng-template>
+          </div>
+          <div class="team-info">
+            <div class="team-name">{{ t.name }}</div>
+            <div class="team-role mb-2">{{ t.role }}</div>
+            <a class="team-link" href="#">Ver más</a>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</section>
+
+<section class="features-section py-5">
+    <div class="container-xxl">
+      
+      <div class="features-layout">
+        <div class="feature-main-card">
+          <div class="f-icon-main mb-3">
+            <i class="bi {{socialFeature.icon}}"></i>
+          </div>
+          <h4 class="f-title-main">{{ socialFeature.title }}</h4>
+          <p class="f-desc-main">{{ socialFeature.desc }}</p>
+        </div>
+
+        <div class="features-list">
+          <ng-container *ngFor="let item of detailFeatures">
+            <div class="feature-item-card">
+              <div class="f-icon-small">
+                <i class="bi {{item.icon}}"></i>
+              </div>
+              <div class="f-content">
+                <h6 class="f-title-small">{{ item.title }}</h6>
+                <p class="f-desc-small">{{ item.desc }}</p>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="cta-section text-center">
+    <div class="container-xxl">
+      <h2 class="cta-title">Tu salud es nuestra prioridad</h2>
+      <p class="cta-subtitle">Reserva tu cita ahora y da el primer paso hacia tu bienestar.</p>
+      <button class="btn-cta">Reservar Cita</button>
+    </div>
+  </section>
+</div>
