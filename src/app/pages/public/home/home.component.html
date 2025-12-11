@@ -1,56 +1,5 @@
 <div class="home-page">
-  <header class="topbar border-bottom">
-    <div class="container-xxl d-flex align-items-center justify-content-between py-2 gap-3">
-      <div class="brand d-flex align-items-center gap-2">
-        <div class="brand-mark d-flex align-items-center justify-content-center">
-          <i class="bi bi-stack"></i>
-        </div>
-        <div class="brand-text">
-          <div class="brand-overline">Centro Médico</div>
-          <div class="brand-title">Huerta Robles</div>
-        </div>
-      </div>
-
-      <nav class="d-none d-lg-flex align-items-center gap-4">
-        <span class="nav-icon"><i class="bi bi-brightness-high"></i></span>
-        <a class="nav-link px-0" routerLink="/app/nosotros">Nosotros</a>
-        <a class="nav-link px-0" routerLink="/app/especialidades">Especialidades</a>
-        <a class="nav-link px-0" routerLink="/app/medicos">Médicos</a>
-        <a class="nav-link px-0" routerLink="/app/blog">Blog</a>
-        <a class="nav-link px-0" routerLink="/app/contacto">Contacto</a>
-      </nav>
-
-      <div class="d-none d-lg-flex align-items-center gap-3 topbar-actions">
-        <span class="nav-divider"></span>
-        <a class="btn btn-ghost" routerLink="/login">Iniciar sesión</a>
-        <a class="btn btn-light border register-btn" routerLink="/register">Registrarme</a>
-        <a class="btn btn-primary cta header-cta" routerLink="/app/intranet/agendar-cita">Agendar Cita</a>
-      </div>
-
-      <button class="btn btn-outline-secondary d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileNav">
-        <i class="bi bi-list"></i>
-      </button>
-    </div>
-  </header>
-
-  <div class="offcanvas offcanvas-end" tabindex="-1" id="mobileNav">
-    <div class="offcanvas-header">
-      <h5 class="mb-0">Menú</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body d-flex flex-column gap-3">
-      <a class="nav-link" routerLink="/app/nosotros">Nosotros</a>
-      <a class="nav-link" routerLink="/app/especialidades">Especialidades</a>
-      <a class="nav-link" routerLink="/app/medicos">Médicos</a>
-      <a class="nav-link" routerLink="/app/blog">Blog</a>
-      <a class="nav-link" routerLink="/app/contacto">Contacto</a>
-      <hr>
-      <a class="btn btn-ghost w-100" routerLink="/login">Iniciar sesión</a>
-      <a class="btn btn-light border w-100" routerLink="/register">Registrarme</a>
-      <a class="btn btn-primary cta w-100" routerLink="/app/intranet/agendar-cita">Agendar Cita</a>
-    </div>
-  </div>
-
+  
   <main class="hero container-xxl">
     <div class="row align-items-center g-5 flex-column flex-lg-row">
       <div class="col-lg-6">
@@ -59,7 +8,7 @@
           Cuidamos de ti y tu familia con un equipo de expertos y tecnología de punta.
           Agenda tu cita en línea de forma rápida y sencilla.
         </p>
-        <a routerLink="/app/intranet/agendar-cita" class="btn btn-primary btn-lg cta hero-cta">
+        <a routerLink="/intranet/agendar-cita" class="btn btn-primary btn-lg cta hero-cta">
           Agendar una Cita <i class="bi bi-arrow-right ms-2"></i>
         </a>
       </div>
@@ -123,7 +72,7 @@
       </div>
 
       <div class="text-center mt-4">
-        <a class="btn btn-primary cta specialties-cta" routerLink="/app/especialidades">
+        <a class="btn btn-primary cta specialties-cta" routerLink="/especialidades">
           Ver todas las especialidades <i class="bi bi-arrow-right ms-2"></i>
         </a>
       </div>
@@ -141,40 +90,4 @@
     <span>Contáctanos</span>
   </a>
 
-  <footer class="footer">
-    <div class="container-xxl">
-      <div class="row g-4">
-        <div class="col-12 col-md-6 col-lg-3">
-          <h5 class="footer-title">Centro Médico Huerta Robles</h5>
-          <p class="footer-text">
-            Ofreciendo atención médica de calidad con un equipo de profesionales comprometidos con tu bienestar.
-          </p>
-        </div>
-        <div class="col-6 col-lg-2">
-          <h6 class="footer-subtitle">Navegación</h6>
-          <ul class="footer-links">
-            <li><a routerLink="/app/nosotros">Nosotros</a></li>
-            <li><a routerLink="/app/especialidades">Especialidades</a></li>
-            <li><a routerLink="/app/medicos">Médicos</a></li>
-            <li><a routerLink="/app/blog">Blog</a></li>
-          </ul>
-        </div>
-        <div class="col-12 col-md-6 col-lg-3">
-          <h6 class="footer-subtitle">Contacto</h6>
-          <p class="footer-text mb-1">Av. Principal 123, Lima, Perú</p>
-          <p class="footer-text mb-1">citas@huertarobles.com</p>
-          <p class="footer-text mb-0">(01) 555-1234</p>
-        </div>
-        <div class="col-6 col-lg-2">
-          <h6 class="footer-subtitle">Horario de Atención</h6>
-          <p class="footer-text mb-1">Atención 24/7</p>
-          <p class="footer-text mb-0">Todos los días, incluyendo feriados.</p>
-        </div>
-      </div>
-      <hr>
-      <div class="footer-bottom text-center">
-        © 2025 Centro Médico Huerta Robles. Todos los derechos reservados.
-      </div>
-    </div>
-  </footer>
 </div>

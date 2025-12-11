@@ -1,0 +1,122 @@
+/* --- ESTILOS BASE (Restaurados) --- */
+.topbar {
+  background: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+  box-shadow: 0 2px 15px rgba(0,0,0,0.04); /* Sombra sutil original */
+}
+
+/* LOGO */
+.brand-mark {
+  width: 40px; height: 40px;
+  background: #eef9fc; /* Fondo suave celeste */
+  color: #0c8cb4;      /* COLOR CORPORATIVO */
+  border-radius: 8px; font-size: 1.2rem;
+}
+
+.brand-text { line-height: 1.1; }
+.brand-overline { font-size: 0.65rem; text-transform: uppercase; color: #6b7280; font-weight: 600; letter-spacing: 0.5px; }
+.brand-title { font-weight: 800; color: #111827; font-size: 1.1rem; }
+
+/* NAVEGACIÓN */
+.nav-link { color: #374151; font-weight: 500; font-size: 0.95rem; transition: color 0.2s; text-decoration: none; }
+.nav-link:hover, .nav-link.active { color: #0c8cb4; } /* Hover celeste */
+.nav-icon { color: #fbbf24; font-size: 1.2rem; }
+
+.nav-divider { width: 1px; height: 24px; background: #e5e7eb; display: block; }
+
+/* BOTONES */
+.btn-ghost { color: #4b5563; font-weight: 600; border: none; background: transparent; }
+.btn-ghost:hover { color: #111827; background: #f3f4f6; }
+
+.register-btn { border-color: #e5e7eb; font-weight: 600; color: #374151; }
+.register-btn:hover { border-color: #d1d5db; background: #f9fafb; }
+
+.cta {
+  background: #0c8cb4; /* COLOR CORPORATIVO */
+  border: none;
+  font-weight: 600;
+  padding: 0.5rem 1.2rem;
+  transition: all 0.2s;
+  color: white;
+  border-radius: 6px;
+  white-space: nowrap; /* Evita que el texto se parta */
+}
+.cta:hover {
+  background: #097699; /* Un tono más oscuro al pasar el mouse */
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(12, 140, 180, 0.2);
+}
+
+/* --- ESTILOS MENÚ USUARIO (Lógica Nueva) --- */
+
+/* Contenedor principal del usuario logueado */
+.user-menu-container {
+  display: flex;          /* ¡CRUCIAL! Alinea Agendar + Avatar */
+  align-items: center;    /* Centrado vertical */
+  gap: 1.5rem;            /* Espacio entre botón y avatar */
+  position: relative;
+}
+
+.cursor-pointer { cursor: pointer; }
+.x-small { font-size: 0.7rem; }
+
+/* Círculo del Avatar */
+.avatar-circle {
+  width: 40px; height: 40px;
+  background: #0c8cb4; /* COLOR CORPORATIVO */
+  color: white;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 1.1rem;
+  border: 2px solid #eef9fc; /* Borde suave */
+}
+
+/* Menú Desplegable */
+.dropdown-menu-custom {
+  position: absolute;
+  top: 140%; right: 0; /* Ajustado para que no tape el header */
+  background: white;
+  border-radius: 12px;
+  min-width: 240px;
+  padding: 8px;
+  display: none;
+  z-index: 1050;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+  border: 1px solid #f0f0f0;
+  animation: slideUp 0.2s ease-out;
+}
+
+.dropdown-menu-custom.show { display: block; }
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-item {
+  padding: 10px 16px;
+  border-radius: 8px;
+  color: #374151;
+  text-decoration: none;
+  display: flex; align-items: center;
+  font-size: 0.9rem; font-weight: 500;
+  transition: background 0.15s;
+  cursor: pointer;
+  border: none; background: none; width: 100%; text-align: left;
+}
+
+.dropdown-item:hover { background: #f0f9ff; color: #0c8cb4; }
+.text-danger:hover { background: #fef2f2; color: #dc2626; }
+
+.dropdown-divider { margin: 6px 0; border-top: 1px solid #f3f4f6; }
+
+/* Flechita decorativa del dropdown */
+.dropdown-arrow {
+  position: absolute; top: -6px; right: 24px;
+  width: 12px; height: 12px;
+  background: white;
+  transform: rotate(45deg);
+  border-left: 1px solid #f0f0f0; border-top: 1px solid #f0f0f0;
+}

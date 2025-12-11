@@ -1,0 +1,113 @@
+<div class="profile-container fade-in">
+  
+  <div class="profile-header">
+    <div class="avatar-circle">
+      {{ usuario?.sub?.charAt(0).toUpperCase() || 'P' }}
+    </div>
+    <div class="profile-info">
+      <h2>Mi Expediente</h2>
+      <p class="email-text">{{ usuario?.sub }}</p>
+      <span class="badge-role">Paciente</span>
+    </div>
+  </div>
+
+  <div class="history-section">
+    <div class="section-title">
+      <h3>📅 Mis Citas Médicas</h3>
+      <button class="btn-refresh" (click)="cargarHistorial()">🔄 Actualizar</button>
+    </div>
+    
+    <div *ngIf="loading" class="loading-state">
+      <div class="spinner"></div>
+      <p>Cargando tu historial...</p>
+    </div>
+
+    <div *ngIf="!loading && historial.length === 0" class="empty-state">
+      <p>No tienes citas registradas aún.</p>
+      <a routerLink="/citas/agendar" class="btn-primary">Agendar mi primera cita</a>
+    </div>
+
+    <div class="citas-grid" *ngIf="!loading && historial.length > 0">
+      <div class="cita-card" *ngFor="let cita of historial">
+        
+        <div class="card-header">
+          <div class="date-box">
+            <span class="day">{{ cita.fechaHora | date:'dd' }}</span>
+            <span class="month">{{ cita.fechaHora | date:'MMM' }}</span>
+          </div>
+          <div class="doctor-info">
+            <h4>{{ cita.especialidad }}</h4>
+            <p>Dr. {{ cita.nombreMedico }}</p>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <p class="modalidad">
+            <i class="icon">📍</i> {{ cita.modalidad }}
+          </p>
+          <span class="status-badge" [ngClass]="cita.estado.toLowerCase()">
+            {{ cita.estado }}
+          </span>
+        </div>
+
+        <div class="card-footer">
+          <button *ngIf="cita.estado === 'FINALIZADO'" 
+                  (click)="verResultados(cita.id)" 
+                  class="btn-action primary">
+            Ver Receta
+          </button>
+          
+          <button *ngIf="cita.estado === 'PENDIENTE'" 
+                  class="btn-action danger">
+            Cancelar
+          </button>
+
+          <span *ngIf="cita.estado === 'CANCELADO'" class="cancelled-text">
+            Cancelada
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="modalReceta" class="modal-overlay"> 
+  <div class="modal-content zoom-in" *ngIf="selectedAtencion">
+    <div class="modal-header">
+      <h3>📋 Resultados de Atención</h3>
+      <button (click)="cerrarModal()" class="close-btn">&times;</button>
+    </div>
+    
+    <div class="modal-body">
+      <div class="info-row">
+        <label>Diagnóstico:</label>
+        <p class="highlight">{{ selectedAtencion.diagnostico }}</p>
+      </div>
+      
+      <div class="info-row">
+        <label>Tratamiento / Indicaciones:</label>
+        <p>{{ selectedAtencion.tratamiento }}</p>
+      </div>
+
+      <div class="medicamentos-box" *ngIf="selectedAtencion.receta?.length > 0">
+        <h4>💊 Receta Médica</h4>
+        <ul>
+          <li *ngFor="let med of selectedAtencion.receta">
+            <div class="med-name">{{ med.medicina }} <span class="med-dose">({{ med.dosis }})</span></div>
+            <small class="med-instr">{{ med.indicaciones }}</small>
+          </li>
+        </ul>
+      </div>
+      
+      <div *ngIf="!selectedAtencion.receta || selectedAtencion.receta.length === 0" class="no-meds">
+        <p>No se recetaron medicamentos en esta consulta.</p>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+        <button (click)="descargarReceta(selectedAtencion.idAtencion)" class="btn-download">
+            📄 Descargar PDF Oficial
+        </button>
+    </div>
+  </div>
+</div>
