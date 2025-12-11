@@ -96,17 +96,22 @@
         </div>
 
         <div class="card faq-card">
-          <div class="faq-item" *ngFor="let faq of faqs; let i = index">
-            <button class="faq-header" (click)="toggleFaq(i)" [class.active]="faq.isOpen">
-              <span>{{ faq.question }}</span>
-              <svg class="chevron" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
-            </button>
-            <div class="faq-body" *ngIf="faq.isOpen">
-              <p>{{ faq.answer }}</p>
+          @for (faq of faqs; track $index) {
+            <div class="faq-item">
+              <button class="faq-header" (click)="toggleFaq($index)" [class.active]="faq.isOpen">
+                <span>{{ faq.question }}</span>
+                <svg class="chevron" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </button>
+              
+              @if (faq.isOpen) {
+                <div class="faq-body">
+                  <p>{{ faq.answer }}</p>
+                </div>
+              }
             </div>
-          </div>
+          }
         </div>
 
       </div>

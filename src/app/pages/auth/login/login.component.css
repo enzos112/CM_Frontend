@@ -1,0 +1,110 @@
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #ecf3f5;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo-container {
+  margin-bottom: 1rem;
+}
+
+.title {
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: #7f8c8d;
+  margin-bottom: 2rem;
+}
+
+.custom-label {
+  font-weight: 600;
+  color: #2d3748; /* Oscurecido ligeramente */
+  font-size: 0.9rem;
+}
+
+.custom-input {
+  background-color: #f0f5f8;
+  border: 1px solid #dae1e7;
+  border-radius: 6px;
+  padding: 0.75rem;
+  color: #495057;
+}
+
+.custom-input:focus {
+  background-color: #ffffff;
+  border-color: #1D82A6;
+  box-shadow: 0 0 0 0.2rem rgba(29, 130, 166, 0.15);
+}
+
+.custom-input::placeholder {
+  color: #a0aec0;
+}
+
+/* --- NUEVOS ESTILOS PARA CORREGIR VISIBILIDAD --- */
+
+/* Texto del checkbox "Recordar mi documento" */
+.label-text {
+  color: #4a5568; /* Gris oscuro, muy legible */
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+/* Texto del pie "¿No tienes cuenta?" */
+.footer-text {
+  color: #4a5568; /* Mismo gris oscuro */
+  font-weight: 500;
+}
+
+/* Checkbox personalizado (opcional, para que combine mejor) */
+.form-check-input {
+  border-color: #cbd5e0;
+  cursor: pointer;
+}
+
+.form-check-input:checked {
+  background-color: #1D82A6;
+  border-color: #1D82A6;
+}
+
+/* Botón principal */
+.custom-btn {
+  background-color: #1D82A6;
+  border: none;
+  border-radius: 6px;
+  padding: 0.75rem;
+  font-weight: 600;
+  transition: background-color 0.3s;
+}
+
+.custom-btn:hover {
+  background-color: #166d8b;
+}
+
+/* Enlaces */
+.footer-links {
+  font-size: 0.9rem;
+}
+
+.link-styled {
+  color: #5d6778; 
+  text-decoration: underline;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.link-styled:hover {
+  color: #1D82A6;
+  font-weight: 600;
+}

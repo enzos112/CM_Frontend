@@ -1,0 +1,122 @@
+.register-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #ecf3f5;
+  padding: 20px;
+}
+
+.register-card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 500px;
+  padding: 2rem;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+/* STEPPER */
+.stepper-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+}
+
+.step-circle {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: #ecf0f1;
+    color: #95a5a6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.step.active .step-circle {
+    background-color: #1D82A6;
+    color: white;
+}
+
+.step-line {
+    flex-grow: 1;
+    height: 2px;
+    background-color: #ecf0f1;
+    margin: 0 8px;
+}
+
+.step-line.active {
+    background-color: #1D82A6;
+}
+
+/* INPUTS */
+.custom-label {
+  font-weight: 600;
+  color: #34495e;
+  font-size: 0.85rem;
+  margin-bottom: 0.4rem;
+}
+
+.custom-input {
+  background-color: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 0.7rem;
+  color: #334155;
+  font-size: 0.95rem;
+}
+
+.custom-input:focus {
+  background-color: #ffffff;
+  border-color: #1D82A6;
+  box-shadow: none;
+  outline: 2px solid rgba(29, 130, 166, 0.2);
+}
+
+.form-check-input:checked {
+    background-color: #1D82A6;
+    border-color: #1D82A6;
+}
+
+/* EXTRA */
+.verification-box {
+    background-color: #eef4f6;
+    border: 1px solid #dcebf0;
+    border-radius: 8px;
+}
+
+.letter-spacing-2 {
+    letter-spacing: 4px;
+    font-size: 1.1rem;
+}
+
+.btn-next {
+    background-color: #12799f;
+    border: none;
+    padding: 0.6rem 1.5rem;
+    font-weight: 600;
+    border-radius: 6px;
+}
+
+.btn-next:hover {
+    background-color: #0f6686;
+}
+
+.btn-back {
+    color: #4a5568;
+    background-color: #f7fafc;
+    border-color: #cbd5e0;
+    font-weight: 600;
+    padding: 0.6rem 1.5rem;
+}
+
+.link-styled {
+  color: #1D82A6;
+  text-decoration: underline;
+  cursor: pointer;
+}

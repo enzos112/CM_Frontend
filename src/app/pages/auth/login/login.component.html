@@ -1,52 +1,64 @@
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-6">
-      <div class="card shadow">
-        <div class="card-body">
-          <h2 class="text-center mb-4">Iniciar Sesión</h2>
-          
-          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-            
-            <div class="mb-3">
-                <label for="email" class="form-label">Correo Electrónico</label>
-                <input 
-                    type="email" 
-                    id="email" 
-                    class="form-control" 
-                    formControlName="email" 
-                    placeholder="nombre@ejemplo.com"
-                    [class.is-invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
-                >
-                <div class="invalid-feedback">
-                    Ingresa un correo válido
-                </div>
-                </div>
+<div class="login-page">
+  <div class="login-card">
+    
+    <div class="logo-container">
+      <svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#1D82A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M2 17L12 22L22 17" stroke="#1D82A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M2 12L12 17L22 12" stroke="#1D82A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
 
-            <div class="mb-3">
-              <label for="password" class="form-label">Contraseña</label>
-              <input 
-                type="password" 
-                id="password" 
-                class="form-control" 
-                formControlName="password"
-                [class.is-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
-              >
-            </div>
+    <h2 class="title">Iniciar sesión</h2>
+    <p class="subtitle">Bienvenido de vuelta.</p>
 
-            <div *ngIf="errorMessage" class="alert alert-danger">
-              {{ errorMessage }}
-            </div>
-            <div class="d-grid gap-2">
-              <button type="submit" class="btn btn-primary btn-lg">Ingresar</button>
-              
-              <a routerLink="/register" class="btn btn-outline-secondary mt-2">
-                Crear cuenta nueva
-              </a>
-            </div>
-          </form>
-
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      
+      <div class="mb-3 text-start">
+        <label for="documento" class="form-label custom-label">Nro. de Documento</label>
+        <input 
+          type="text" 
+          id="documento" 
+          class="form-control custom-input" 
+          formControlName="documento" 
+          placeholder="Ingrese su documento"
+          [class.is-invalid]="loginForm.get('documento')?.invalid && loginForm.get('documento')?.touched"
+        >
+        <div class="invalid-feedback">
+           El documento es requerido.
         </div>
       </div>
-    </div>
+
+      <div class="mb-3 text-start">
+        <label for="password" class="form-label custom-label">Contraseña</label>
+        <input 
+          type="password" 
+          id="password" 
+          class="form-control custom-input" 
+          formControlName="password"
+          placeholder="........"
+          [class.is-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+        >
+      </div>
+
+      <div class="mb-4 form-check text-start">
+        <input type="checkbox" class="form-check-input" id="rememberMe">
+        <label class="form-check-label label-text" for="rememberMe">Recordar mi documento</label>
+      </div>
+
+      <div *ngIf="errorMessage" class="alert alert-danger p-2 text-center small">
+        {{ errorMessage }}
+      </div>
+
+      <div class="d-grid gap-2">
+        <button type="submit" class="btn btn-primary custom-btn">Ingresar</button>
+      </div>
+
+      <div class="footer-links mt-4">
+        <p class="mb-1 footer-text">¿No tienes cuenta? <a routerLink="/register" class="link-styled">Crear cuenta</a></p>
+        <a href="#" class="link-styled small">¿Olvidaste tu contraseña?</a>
+      </div>
+
+    </form>
   </div>
 </div>

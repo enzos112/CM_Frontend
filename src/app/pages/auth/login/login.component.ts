@@ -2,7 +2,11 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+<<<<<<< HEAD
 import { AuthService } from '../../../core/services/auth.service';
+=======
+import { AuthService } from '../../../core/services/auth.service'; 
+>>>>>>> 3541ebfe02590eb28dddca3951ccc0ec2920ead9
 
 @Component({
   selector: 'app-login',
@@ -21,17 +25,34 @@ export class LoginComponent {
     private authService: AuthService,
     private router: Router
   ) {
+    // CAMBIO IMPORTANTE: Cambié 'email' por 'documento' según el diseño visual
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      documento: ['', [Validators.required]], // Quitamos Validators.email si es un DNI/RUC
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
 
   onSubmit() {
+<<<<<<< HEAD
     if (this.loginForm.invalid) {
       alert('❌ Formulario inválido. Revisa los campos.');
       this.loginForm.markAllAsTouched();
       return;
+=======
+    if (this.loginForm.valid) {
+      this.authService.login(this.loginForm.value).subscribe({
+        next: (response: any) => { 
+          this.authService.saveToken(response.token);
+          this.router.navigate(['/intranet/dashboard']); 
+        },
+        error: (error: any) => { 
+          // Manejo de error más amigable
+          this.errorMessage = 'Credenciales incorrectas. Verifique su documento y contraseña.';
+        }
+      });
+    } else {
+      this.loginForm.markAllAsTouched(); 
+>>>>>>> 3541ebfe02590eb28dddca3951ccc0ec2920ead9
     }
 
     this.loading = true;
