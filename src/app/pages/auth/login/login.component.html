@@ -12,51 +12,74 @@
     <h2 class="title">Iniciar sesión</h2>
     <p class="subtitle">Bienvenido de vuelta.</p>
 
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
       
       <div class="mb-3 text-start">
-        <label for="documento" class="form-label custom-label">Nro. de Documento</label>
-        <input 
-          type="text" 
-          id="documento" 
-          class="form-control custom-input" 
-          formControlName="documento" 
-          placeholder="Ingrese su documento"
-          [class.is-invalid]="loginForm.get('documento')?.invalid && loginForm.get('documento')?.touched"
-        >
-        <div class="invalid-feedback">
-           El documento es requerido.
+        <label for="email" class="form-label custom-label">Correo Electrónico</label>
+        <div class="input-group has-validation">
+          <input 
+            type="email" 
+            id="email" 
+            class="form-control custom-input" 
+            formControlName="email" 
+            placeholder="nombre@ejemplo.com"
+            [class.is-invalid]="loginForm.get('email')?.invalid && (loginForm.get('email')?.touched || loginForm.get('email')?.dirty)"
+          >
+          <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="invalid-feedback d-block small mt-1">
+            <span *ngIf="loginForm.get('email')?.errors?.['required']">El correo es requerido.</span>
+            <span *ngIf="loginForm.get('email')?.errors?.['pattern']">Ingresa un correo válido (ej: usuario@dominio.com).</span>
+          </div>
         </div>
       </div>
 
       <div class="mb-3 text-start">
         <label for="password" class="form-label custom-label">Contraseña</label>
-        <input 
-          type="password" 
-          id="password" 
-          class="form-control custom-input" 
-          formControlName="password"
-          placeholder="........"
-          [class.is-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
-        >
+        
+        <div class="input-group has-validation">
+          <input 
+            [type]="showPassword ? 'text' : 'password'" 
+            id="password" 
+            class="form-control custom-input border-end-0" 
+            formControlName="password" 
+            placeholder="••••••••"
+            [class.is-invalid]="f['password'].invalid && (f['password'].dirty || f['password'].touched)"
+          >
+          
+          <button 
+            class="btn btn-outline-secondary border-start-0 bg-white" 
+            type="button" 
+            (click)="togglePasswordVisibility()"
+            [title]="showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+            [attr.aria-label]="showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+              <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'" aria-hidden="true"></i>
+          </button>
+
+          <div class="invalid-feedback" *ngIf="f['password'].errors?.['required']">
+            La contraseña es obligatoria.
+          </div>
+        </div>
       </div>
 
       <div class="mb-4 form-check text-start">
         <input type="checkbox" class="form-check-input" id="rememberMe">
-        <label class="form-check-label label-text" for="rememberMe">Recordar mi documento</label>
+        <label class="form-check-label label-text" for="rememberMe">Recordar mi usuario</label>
       </div>
 
-      <div *ngIf="errorMessage" class="alert alert-danger p-2 text-center small">
-        {{ errorMessage }}
+      <div *ngIf="errorMessage" class="alert alert-danger p-2 text-center small fade show d-flex align-items-center justify-content-center gap-2">
+        <i class="bi bi-exclamation-circle"></i>
+        <span>{{ errorMessage }}</span>
       </div>
 
       <div class="d-grid gap-2">
-        <button type="submit" class="btn btn-primary custom-btn">Ingresar</button>
+        <button type="submit" class="btn btn-primary custom-btn" [disabled]="loading || loginForm.invalid">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+          {{ loading ? 'Ingresando...' : 'Ingresar' }}
+        </button>
       </div>
 
       <div class="footer-links mt-4">
         <p class="mb-1 footer-text">¿No tienes cuenta? <a routerLink="/register" class="link-styled">Crear cuenta</a></p>
-        <a href="#" class="link-styled small">¿Olvidaste tu contraseña?</a>
+        <a routerLink="/auth/forgot-password" class="link-styled small">¿Olvidaste tu contraseña?</a>
       </div>
 
     </form>

@@ -1,30 +1,29 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { CommonModule } from '@angular/common'; // Importante para *ngIf
+import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-header',
   standalone: true,
   imports: [RouterLink, RouterLinkActive, CommonModule],
-  templateUrl: './header.component.html', // Usaremos archivo externo
+  templateUrl: './header.component.html', 
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
   currentUser: any = null;
-  showDropdown = false; // Controla el menú desplegable
+  showDropdown = false;
 
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
-  alert('¡HEADER CARGADO!'); // <--- AGREGAR ESTO
-  console.log('Iniciando Header...');
-  
-  this.authService.user$.subscribe(user => {
-    console.log('Usuario recibido:', user);
-    this.currentUser = user;
-  });
-}
+    // Suscripción al estado del usuario (Sin alertas ni logs)
+    this.authService.user$.subscribe(user => {
+      this.currentUser = user;
+      // Opcional: Si el usuario cambia (ej: logout), cerramos el dropdown
+      this.showDropdown = false;
+    });
+  }
 
   toggleDropdown() {
     this.showDropdown = !this.showDropdown;

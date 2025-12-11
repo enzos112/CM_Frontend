@@ -108,3 +108,33 @@
   color: #1D82A6;
   font-weight: 600;
 }
+
+/* Estilo para unir input password con botón de ojo */
+.input-group .custom-input.border-end-0 {
+    border-right: none;
+}
+
+.input-group .btn-outline-secondary.border-start-0 {
+    border-left: none;
+    border-color: #dee2e6;
+    color: #6c757d;
+}
+
+.input-group .btn-outline-secondary:hover,
+.input-group .btn-outline-secondary:focus {
+    background-color: transparent;
+    color: #0c8cb4; /* Tu color corporativo */
+    border-color: #dee2e6;
+    box-shadow: none;
+}
+
+/* Foco: Iluminar el borde del botón cuando el input tiene foco */
+.custom-input:focus + .btn-outline-secondary {
+    border-color: #0c8cb4;
+    border-left: none;
+}
+
+/* Foco en error: Si hay error, el borde debe ser rojo */
+.custom-input.is-invalid + .btn-outline-secondary {
+    border-color: #dc3545; /* Color rojo de Bootstrap */
+}

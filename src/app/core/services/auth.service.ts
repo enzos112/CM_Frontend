@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { environment } from '../../environments/environment';
+import { environment } from '../../environments/environment'; // Asegúrate que la ruta sea correcta según tu estructura
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -13,11 +13,10 @@ export class AuthService {
   
   // "Radio" que emite el estado del usuario actual
   private userSubject = new BehaviorSubject<any>(this.getUserFromStorage());
-  public user$ = this.userSubject.asObservable(); // Los componentes se suscriben a esto
+  public user$ = this.userSubject.asObservable();
 
   constructor(private http: HttpClient, private router: Router) { }
 
-  // 1. Obtener usuario inicial (si ya estaba logueado al refrescar)
   private getUserFromStorage(): any {
     const token = this.getToken();
     if (!token) return null;
@@ -29,26 +28,32 @@ export class AuthService {
       tap((response: any) => {
         if (response.token) {
           this.saveToken(response.token);
-          // Avisar a toda la app que hay usuario nuevo
-          this.userSubject.next(this.decodeToken(response.token)); 
         }
       })
     );
   }
 
   register(userData: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, userData);
+    return this.http.post(`${this.apiUrl}/register`, userData).pipe(
+      tap((response: any) => {
+        if (response.token) {
+          this.saveToken(response.token);
+        }
+      })
+    );
   }
 
   logout(): void {
     localStorage.removeItem('token');
-    this.userSubject.next(null); // Avisar que se fue
+    this.userSubject.next(null);
     this.router.navigate(['/login']);
   }
 
   saveToken(token: string): void {
     if (typeof localStorage !== 'undefined') {
       localStorage.setItem('token', token);
+      const user = this.decodeToken(token);
+      this.userSubject.next(user); 
     }
   }
 
@@ -59,29 +64,32 @@ export class AuthService {
     return null;
   }
 
-  // Utilidad para decodificar JWT de forma segura
+  // --- AQUÍ ESTÁ LA CORRECCIÓN ---
   private decodeToken(token: string): any {
     try {
-      // 1. Separar el payload
       const base64Url = token.split('.')[1];
-      
-      // 2. Convertir Base64Url a Base64 estándar
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
       
-      // 3. Decodificar la cadena Base64 a texto
       const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
       }).join(''));
 
-      // 4. Parsear el JSON
-      return JSON.parse(jsonPayload);
+      const payload = JSON.parse(jsonPayload);
+
+      // === PARCHE DE ROL ===
+      // Si el backend envía el rol por defecto 'USER', lo interpretamos como 'PACIENTE'
+      // para que la interfaz muestre las opciones correctas inmediatamente.
+      if (payload.role === 'USER') {
+        payload.role = 'PACIENTE';
+      }
+
+      return payload;
     } catch (e) {
-      console.error('Error al decodificar el token:', e);
+      console.error('Error al decodificar token', e);
       return null;
     }
   }
 
-  // Método público para obtener el valor actual sin suscribirse
   getUser(): any {
     return this.userSubject.value;
   }
