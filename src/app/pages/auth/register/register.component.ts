@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Se quitó TitleCasePipe para limpiar la advertencia
+import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
@@ -18,14 +18,18 @@ export class RegisterComponent implements OnInit {
   successMessage: string = '';
   maxDate: string;
   
+  // Variables visuales
   currentStep: number = 1;
   totalSteps: number = 5;
   isLoading: boolean = false;
+  showPassword: boolean = false;
 
+  // Listas
   departamentos: string[] = [];
   provincias: string[] = [];
   distritos: string[] = [];
 
+  // Configuración de documentos
   tiposDocumento = [
     { value: 'DNI', name: 'DNI (Doc. Nacional de Identidad)', pattern: '^[0-9]{8}$', length: 8, onlyNumbers: true },
     { value: 'CE', name: 'Carnet Extranjería', pattern: '^[0-9]{12}$', length: 12, onlyNumbers: true },
@@ -45,7 +49,6 @@ export class RegisterComponent implements OnInit {
     { code: '+57', country: 'CO', flag: '🇨🇴' },
   ];
   selectedPrefix = '+51';
-  showPassword = false;
 
   passwordCriteria = { hasNumber: false, hasUpper: false, hasSpecial: false };
 
@@ -61,15 +64,22 @@ export class RegisterComponent implements OnInit {
     this.departamentos = Object.keys(UBIGEO_PERU);
 
     this.registerForm = this.fb.group({
+      // PASO 1: Identificación
       tipoDocumento: ['DNI', Validators.required], 
       numeroDocumento: ['', [Validators.required, Validators.pattern('^[0-9]{8}$')]],
       
+      // PASO 2: Datos Personales
       nombres: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^[A-ZÑÁÉÍÓÚ\s]+$/)]],
       apellidoPaterno: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^[A-ZÑÁÉÍÓÚ]+$/)]],
       apellidoMaterno: ['', [Validators.required, Validators.pattern(/^[A-ZÑÁÉÍÓÚ]+$/)]], 
       fechaNacimiento: ['', Validators.required],
-      genero: ['', Validators.required], 
+      genero: ['', Validators.required],
+      
+      // --- CONTACTO DE EMERGENCIA (Nuevos) ---
+      nombreEmergencia: ['', [Validators.required, Validators.minLength(3), Validators.pattern(/^[A-ZÑÁÉÍÓÚ\s]+$/)]],
+      telefonoEmergencia: ['', [Validators.required, Validators.pattern(/^9[0-9]{8}$/)]],
 
+      // PASO 3: Cuenta y Seguridad
       telefonoMovil: ['', [Validators.required, Validators.pattern(/^9[0-9]{8}$/)]],
       email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/)]],
       password: ['', [Validators.required, Validators.minLength(8)]], 
@@ -77,16 +87,19 @@ export class RegisterComponent implements OnInit {
       acceptTerms: [false, Validators.requiredTrue],
       acceptConsent: [false, Validators.requiredTrue],
 
+      // PASO 4: Dirección
       departamento: ['', Validators.required],
       provincia: ['', Validators.required],
       distrito: ['', Validators.required],
       direccion: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9\s.,#-]+$/)]],
 
+      // PASO 5: OTP
       verificationCode: ['']
     });
   }
 
   ngOnInit(): void {
+    // 1. Lógica dinámica de documentos
     this.registerForm.get('tipoDocumento')?.valueChanges.subscribe(tipo => {
       const docControl = this.registerForm.get('numeroDocumento');
       const config = this.tiposDocumento.find(d => d.value === tipo);
@@ -105,6 +118,7 @@ export class RegisterComponent implements OnInit {
       docControl?.updateValueAndValidity();
     });
 
+    // 2. Lógica Ubigeo
     this.registerForm.get('departamento')?.valueChanges.subscribe(dep => {
         this.provincias = [];
         this.distritos = [];
@@ -120,11 +134,13 @@ export class RegisterComponent implements OnInit {
         if (dep && prov && UBIGEO_PERU[dep]) this.distritos = UBIGEO_PERU[dep][prov];
     });
 
+    // 3. Análisis de contraseña
     this.registerForm.get('password')?.valueChanges.subscribe(val => {
         this.updatePasswordCriteria(val || '');
     });
   }
 
+  // --- Helpers de Inputs ---
   onDocumentInput(event: any) {
     const input = event.target;
     const tipo = this.registerForm.get('tipoDocumento')?.value;
@@ -141,7 +157,8 @@ export class RegisterComponent implements OnInit {
   onPhoneInput(event: any) {
     const input = event.target;
     input.value = input.value.replace(/[^0-9]/g, '');
-    this.registerForm.get('telefonoMovil')?.setValue(input.value);
+    const controlName = input.getAttribute('formControlName');
+    if(controlName) this.registerForm.get(controlName)?.setValue(input.value);
   }
 
   toUpperCase(event: any) {
@@ -161,7 +178,8 @@ export class RegisterComponent implements OnInit {
        value = value.trimEnd(); 
     }
     input.value = value;
-    this.registerForm.get('nombres')?.setValue(value, { emitEvent: false });
+    const controlName = input.getAttribute('formControlName');
+    if (controlName) this.registerForm.get(controlName)?.setValue(value, { emitEvent: false });
   }
 
   updatePasswordCriteria(value: string) {
@@ -177,8 +195,6 @@ export class RegisterComponent implements OnInit {
     return this.tiposDocumento.find(d => d.value === tipo);
   }
 
-  // --- NUEVA FUNCIÓN PARA FORMATEAR GÉNERO ---
-  // Reemplaza los guiones bajos por espacios
   formatGender(gender: string): string {
     return gender ? gender.replace(/_/g, ' ') : '';
   }
@@ -192,7 +208,11 @@ export class RegisterComponent implements OnInit {
   closeConsent() { this.showConsentModal = false; }
   acceptConsent() { this.registerForm.get('acceptConsent')?.setValue(true); this.closeConsent(); }
 
-  // Navegación
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
+  // --- Navegación del Wizard ---
   nextStep() {
     if (this.currentStep < this.totalSteps) {
       if (this.validateCurrentStep()) {
@@ -237,7 +257,8 @@ export class RegisterComponent implements OnInit {
   getFieldsForStep(step: number): string[] {
     switch(step) {
       case 1: return ['tipoDocumento', 'numeroDocumento'];
-      case 2: return ['nombres', 'apellidoPaterno', 'apellidoMaterno', 'fechaNacimiento', 'genero'];
+      // AQUÍ VALIDAMOS LOS NUEVOS CAMPOS
+      case 2: return ['nombres', 'apellidoPaterno', 'apellidoMaterno', 'fechaNacimiento', 'genero', 'nombreEmergencia', 'telefonoEmergencia'];
       case 3: return ['telefonoMovil', 'email', 'password', 'confirmPassword', 'acceptTerms', 'acceptConsent'];
       case 4: return ['departamento', 'provincia', 'distrito', 'direccion']; 
       case 5: return ['verificationCode'];
@@ -245,13 +266,11 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-  togglePasswordVisibility() {
-    this.showPassword = !this.showPassword;
-  }
-
+  // --- ENVÍO AL BACKEND ---
   onSubmit() {
     this.errorMessage = '';
-    // Mock OTP (en producción esto se valida en backend)
+    
+    // Mock OTP
     if (this.registerForm.get('verificationCode')?.value !== '123456') {
         this.errorMessage = 'Código de verificación incorrecto.';
         return;
@@ -259,15 +278,45 @@ export class RegisterComponent implements OnInit {
     
     if (this.registerForm.valid) {
         this.isLoading = true;
-        const formValue = this.registerForm.value;
+        const formValues = this.registerForm.value;
         
-        // El pipe tap() en AuthService ya guardará el token y actualizará el header
-        this.authService.register(formValue).subscribe({
+        // === MAPEO DE DATOS PARA EL DTO DE JAVA ===
+        const requestData = {
+            // Credenciales y Doc
+            email: formValues.email,
+            password: formValues.password,
+            tipoDocumento: formValues.tipoDocumento,
+            numeroDocumento: formValues.numeroDocumento,
+            
+            // Personales
+            nombres: formValues.nombres,
+            apellidoPaterno: formValues.apellidoPaterno,
+            apellidoMaterno: formValues.apellidoMaterno,
+            fechaNacimiento: formValues.fechaNacimiento,
+            genero: formValues.genero,
+            telefonoMovil: formValues.telefonoMovil,
+            
+            // Dirección (Mapeo)
+            region: formValues.departamento,        
+            provincia: formValues.provincia,
+            distrito: formValues.distrito,
+            direccionCalle: formValues.direccion,   
+            
+            // Emergencia (Mapeo)
+            contactoEmergenciaNombre: formValues.nombreEmergencia,
+            contactoEmergenciaTelefono: formValues.telefonoEmergencia
+        };
+        
+        this.authService.register(requestData).subscribe({
             next: (response: any) => {
                 this.isLoading = false;
                 this.successMessage = 'Registro exitoso! Redirigiendo...';
                 
-                // Redirigir al Home (ruta raíz) para que vea su perfil nuevo
+                // Guardar token y avisar al header
+                if(response.token) {
+                   this.authService.saveToken(response.token);
+                }
+
                 setTimeout(() => this.router.navigate(['/']), 1500);
             },
             error: (error: any) => {

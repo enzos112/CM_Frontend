@@ -1,0 +1,138 @@
+<div class="agendar-container py-5 bg-light-subtle">
+  <div class="container-xxl">
+    <div class="row g-5">
+      
+      <div class="col-lg-8">
+        <div class="wizard-card shadow-sm bg-white p-4 p-md-5 rounded-4 border-0">
+          
+          <div class="d-flex align-items-center justify-content-between mb-4">
+            <div class="progress-indicator d-flex gap-2">
+              <div class="progress-pill" [class.active]="currentStep >= 1"></div>
+              <div class="progress-pill" [class.active]="currentStep >= 2"></div>
+              <div class="progress-pill" [class.active]="currentStep >= 3"></div>
+              <div class="progress-pill" [class.active]="currentStep >= 4"></div>
+              <div class="progress-pill" [class.active]="currentStep >= 5"></div>
+              <div class="progress-pill" [class.active]="currentStep >= 6"></div>
+              <div class="progress-pill" [class.active]="currentStep >= 7"></div>
+              <div class="progress-pill" [class.active]="currentStep >= 8"></div>
+              <div class="progress-pill" [class.active]="currentStep >= 9"></div>
+            </div>
+            <span class="text-muted small fw-semibold">Paso {{ currentStep }} de {{ totalSteps }}</span>
+          </div>
+
+          <div *ngIf="currentStep === 1" class="fade-in">
+            <h3 class="text-center fw-bold text-dark mb-5">Seleccione la modalidad de la cita</h3>
+            
+            <div class="row g-4 justify-content-center">
+              
+              <div class="col-md-4">
+                <div class="modalidad-card h-100" 
+                     [class.selected]="selectedModalidad === 'CONSULTORIO'"
+                     (click)="selectModalidad('CONSULTORIO')">
+                  <div class="icon-wrapper mb-3">
+                    <i class="bi bi-hospital"></i>
+                  </div>
+                  <h5 class="fw-bold mb-2">En consultorio</h5>
+                  <p class="text-muted small mb-0">Visítenos en nuestro centro médico equipado.</p>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="modalidad-card h-100" 
+                     [class.selected]="selectedModalidad === 'DOMICILIO'"
+                     (click)="selectModalidad('DOMICILIO')">
+                  <div class="icon-wrapper mb-3">
+                    <i class="bi bi-house-heart"></i>
+                  </div>
+                  <h5 class="fw-bold mb-2">A Domicilio</h5>
+                  <p class="text-muted small mb-0">Reciba atención médica en la comodidad de su hogar.</p>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="modalidad-card h-100" 
+                     [class.selected]="selectedModalidad === 'VIRTUAL'"
+                     (click)="selectModalidad('VIRTUAL')">
+                  <div class="icon-wrapper mb-3">
+                    <i class="bi bi-camera-video"></i>
+                  </div>
+                  <h5 class="fw-bold mb-2">Virtual</h5>
+                  <p class="text-muted small mb-0">Consulta médica a través de videollamada segura.</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div *ngIf="currentStep === 2" class="fade-in">
+            <h3>Paso 2: Especialidad</h3>
+            <p>Aquí irá la selección de especialidades...</p>
+            <button class="btn btn-secondary" (click)="currentStep = 1">Atrás</button>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="resumen-card shadow-sm bg-white p-4 rounded-4 border-0 sticky-top" style="top: 2rem; z-index: 10;">
+          <h5 class="fw-bold mb-4 border-bottom pb-3">Resumen de tu Cita</h5>
+          
+          <div class="resumen-list d-flex flex-column gap-3">
+            
+            <div class="resumen-item d-flex gap-3">
+              <div class="resumen-icon text-muted"><i class="bi bi-hospital"></i></div>
+              <div>
+                <small class="text-muted d-block text-uppercase x-small fw-bold">Modalidad</small>
+                <span class="fw-medium text-dark">{{ selectedModalidad || '...' }}</span>
+              </div>
+            </div>
+
+            <div class="resumen-item d-flex gap-3">
+              <div class="resumen-icon text-muted"><i class="bi bi-journal-medical"></i></div>
+              <div>
+                <small class="text-muted d-block text-uppercase x-small fw-bold">Especialidad</small>
+                <span class="fw-medium text-muted">...</span>
+              </div>
+            </div>
+
+            <div class="resumen-item d-flex gap-3">
+              <div class="resumen-icon text-muted"><i class="bi bi-person-badge"></i></div>
+              <div>
+                <small class="text-muted d-block text-uppercase x-small fw-bold">Médico</small>
+                <span class="fw-medium text-muted">...</span>
+              </div>
+            </div>
+
+            <div class="resumen-item d-flex gap-3">
+              <div class="resumen-icon text-muted"><i class="bi bi-calendar-event"></i></div>
+              <div>
+                <small class="text-muted d-block text-uppercase x-small fw-bold">Fecha y Hora</small>
+                <span class="fw-medium text-muted">...</span>
+              </div>
+            </div>
+
+            <hr class="my-1 border-light-subtle">
+
+            <div class="resumen-item d-flex gap-3">
+              <div class="resumen-icon text-muted"><i class="bi bi-person"></i></div>
+              <div>
+                <small class="text-muted d-block text-uppercase x-small fw-bold">Paciente</small>
+                <span class="fw-medium text-muted">...</span>
+              </div>
+            </div>
+
+            <div class="resumen-item d-flex gap-3">
+              <div class="resumen-icon text-muted"><i class="bi bi-credit-card"></i></div>
+              <div>
+                <small class="text-muted d-block text-uppercase x-small fw-bold">Pago</small>
+                <span class="fw-medium text-muted">...</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

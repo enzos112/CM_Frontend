@@ -1,113 +1,299 @@
-<div class="profile-container fade-in">
-  
-  <div class="profile-header">
-    <div class="avatar-circle">
-      {{ usuario?.sub?.charAt(0).toUpperCase() || 'P' }}
-    </div>
-    <div class="profile-info">
-      <h2>Mi Expediente</h2>
-      <p class="email-text">{{ usuario?.sub }}</p>
-      <span class="badge-role">Paciente</span>
-    </div>
-  </div>
-
-  <div class="history-section">
-    <div class="section-title">
-      <h3>📅 Mis Citas Médicas</h3>
-      <button class="btn-refresh" (click)="cargarHistorial()">🔄 Actualizar</button>
-    </div>
+<div class="profile-container py-5 bg-light-subtle">
+  <div class="container-xxl">
     
-    <div *ngIf="loading" class="loading-state">
-      <div class="spinner"></div>
-      <p>Cargando tu historial...</p>
+    <div class="mb-4">
+      <h3 class="fw-bold text-primary mb-1">Mi Perfil</h3>
+      <p class="text-muted">Consulta y actualiza tu información personal y de seguridad.</p>
     </div>
 
-    <div *ngIf="!loading && historial.length === 0" class="empty-state">
-      <p>No tienes citas registradas aún.</p>
-      <a routerLink="/citas/agendar" class="btn-primary">Agendar mi primera cita</a>
-    </div>
-
-    <div class="citas-grid" *ngIf="!loading && historial.length > 0">
-      <div class="cita-card" *ngFor="let cita of historial">
-        
-        <div class="card-header">
-          <div class="date-box">
-            <span class="day">{{ cita.fechaHora | date:'dd' }}</span>
-            <span class="month">{{ cita.fechaHora | date:'MMM' }}</span>
-          </div>
-          <div class="doctor-info">
-            <h4>{{ cita.especialidad }}</h4>
-            <p>Dr. {{ cita.nombreMedico }}</p>
-          </div>
-        </div>
-
-        <div class="card-body">
-          <p class="modalidad">
-            <i class="icon">📍</i> {{ cita.modalidad }}
-          </p>
-          <span class="status-badge" [ngClass]="cita.estado.toLowerCase()">
-            {{ cita.estado }}
-          </span>
-        </div>
-
-        <div class="card-footer">
-          <button *ngIf="cita.estado === 'FINALIZADO'" 
-                  (click)="verResultados(cita.id)" 
-                  class="btn-action primary">
-            Ver Receta
-          </button>
-          
-          <button *ngIf="cita.estado === 'PENDIENTE'" 
-                  class="btn-action danger">
-            Cancelar
-          </button>
-
-          <span *ngIf="cita.estado === 'CANCELADO'" class="cancelled-text">
-            Cancelada
-          </span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div id="modalReceta" class="modal-overlay"> 
-  <div class="modal-content zoom-in" *ngIf="selectedAtencion">
-    <div class="modal-header">
-      <h3>📋 Resultados de Atención</h3>
-      <button (click)="cerrarModal()" class="close-btn">&times;</button>
-    </div>
-    
-    <div class="modal-body">
-      <div class="info-row">
-        <label>Diagnóstico:</label>
-        <p class="highlight">{{ selectedAtencion.diagnostico }}</p>
-      </div>
+    <form [formGroup]="profileForm" (ngSubmit)="guardarCambios()">
       
-      <div class="info-row">
-        <label>Tratamiento / Indicaciones:</label>
-        <p>{{ selectedAtencion.tratamiento }}</p>
+      <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="card-body p-4">
+          <h5 class="fw-bold text-dark mb-1">Datos Personales</h5>
+          <p class="text-muted small mb-4">Esta información es visible para nuestros médicos.</p>
+
+          <div class="row g-3">
+            
+            <div class="col-md-6">
+              <label class="form-label custom-label">Nombres</label>
+              <input type="text" class="form-control custom-input" formControlName="nombres">
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label custom-label">Apellidos</label>
+              <input type="text" class="form-control custom-input" formControlName="apellidos">
+            </div>
+
+            <div class="col-12 mt-3">
+              <label class="form-label custom-label d-flex align-items-center gap-2">
+                <i class="bi bi-pencil-fill text-muted edit-icon" (click)="enableEdit('telefono')" title="Editar teléfono"></i>
+                Teléfono
+              </label>
+              <input type="text" class="form-control custom-input" formControlName="telefono" [class.editable]="editState.telefono">
+            </div>
+
+            <div class="col-12 mt-3">
+              <label class="form-label custom-label d-flex align-items-center gap-2">
+                <i class="bi bi-pencil-fill text-muted edit-icon" (click)="enableEdit('direccion')" title="Editar dirección"></i>
+                Dirección
+              </label>
+              <input type="text" class="form-control custom-input" formControlName="direccion" [class.editable]="editState.direccion">
+            </div>
+
+          </div>
+        </div>
       </div>
 
-      <div class="medicamentos-box" *ngIf="selectedAtencion.receta?.length > 0">
-        <h4>💊 Receta Médica</h4>
-        <ul>
-          <li *ngFor="let med of selectedAtencion.receta">
-            <div class="med-name">{{ med.medicina }} <span class="med-dose">({{ med.dosis }})</span></div>
-            <small class="med-instr">{{ med.indicaciones }}</small>
-          </li>
-        </ul>
-      </div>
-      
-      <div *ngIf="!selectedAtencion.receta || selectedAtencion.receta.length === 0" class="no-meds">
-        <p>No se recetaron medicamentos en esta consulta.</p>
-      </div>
-    </div>
+      <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="card-body p-4">
+          <h5 class="fw-bold text-dark mb-1">Contacto de Emergencia</h5>
+          <p class="text-muted small mb-4">Persona a contactar en caso de necesidad.</p>
 
-    <div class="modal-footer">
-        <button (click)="descargarReceta(selectedAtencion.idAtencion)" class="btn-download">
-            📄 Descargar PDF Oficial
+          <div class="row g-3">
+            <div class="col-md-7">
+              <label class="form-label custom-label d-flex align-items-center gap-2">
+                <i class="bi bi-pencil-fill text-muted edit-icon" (click)="enableEdit('nombreEmergencia')" title="Editar nombre contacto"></i>
+                Nombre del Familiar
+              </label>
+              <input type="text" class="form-control custom-input" formControlName="nombreEmergencia" [class.editable]="editState.nombreEmergencia">
+            </div>
+
+            <div class="col-md-5">
+              <label class="form-label custom-label d-flex align-items-center gap-2">
+                <i class="bi bi-pencil-fill text-muted edit-icon" (click)="enableEdit('telefonoEmergencia')" title="Editar teléfono contacto"></i>
+                Celular Emergencia
+              </label>
+              <input type="text" class="form-control custom-input" formControlName="telefonoEmergencia" [class.editable]="editState.telefonoEmergencia">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="card-body p-4">
+          <h5 class="fw-bold text-dark mb-1">Datos de la Cuenta</h5>
+          <p class="text-muted small mb-4">Estos datos no son editables.</p>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label custom-label">DNI</label>
+              <input type="text" class="form-control custom-input" formControlName="dni">
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label custom-label d-flex align-items-center gap-2">
+                <i class="bi bi-pencil-fill text-muted edit-icon" (click)="openEmailModal()" title="Cambiar correo"></i>
+                Correo de Acceso
+              </label>
+              <input type="text" class="form-control custom-input" formControlName="email">
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label custom-label">Fecha de Registro</label>
+              <input type="text" class="form-control custom-input" formControlName="fechaRegistro">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center mt-4">
+        <button type="button" class="btn btn-secondary px-4 py-2" (click)="openPasswordModal()">
+          Cambiar Contraseña
         </button>
+
+        <button type="submit" 
+                class="btn btn-primary px-4 py-2" 
+                [disabled]="!editState.telefono && !editState.direccion && !editState.nombreEmergencia && !editState.telefonoEmergencia">
+          Guardar Cambios
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+  <div class="custom-modal-overlay" *ngIf="showPasswordModal">
+   </div>
+</div>
+
+<div class="custom-modal-overlay" *ngIf="showPasswordModal">
+  <div class="custom-modal p-4" style="max-width: 450px;">
+    
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h5 class="fw-bold mb-0">Seguridad de la Cuenta</h5>
+      <button type="button" class="btn-close" (click)="closePasswordModal()"></button>
     </div>
+
+    <div *ngIf="modalStep === 1" class="text-center">
+      <div class="mb-3">
+        <i class="bi bi-shield-lock text-primary" style="font-size: 3rem;"></i>
+      </div>
+      <p class="text-muted mb-4">
+        Por tu seguridad, enviaremos un código de verificación a tu correo 
+        <strong>{{ usuario?.email }}</strong> antes de cambiar la contraseña.
+      </p>
+      <button class="btn btn-primary w-100" (click)="sendCode()" [disabled]="isLoadingModal">
+        <span *ngIf="isLoadingModal" class="spinner-border spinner-border-sm me-2"></span>
+        {{ isLoadingModal ? 'Enviando...' : 'Enviar Código' }}
+      </button>
+    </div>
+
+    <div *ngIf="modalStep === 2">
+      <p class="small text-muted mb-2">Hemos enviado el código <strong>123456</strong> a tu correo.</p>
+      
+      <form [formGroup]="passwordForm" (ngSubmit)="verifyCode()">
+        <div class="mb-3">
+          <label class="form-label custom-label">Código de Verificación</label>
+          <input type="text" 
+                 class="form-control custom-input text-center letter-spacing-2" 
+                 formControlName="verificationCode" 
+                 placeholder="000000" maxlength="6">
+        </div>
+        
+        <div *ngIf="modalError" class="alert alert-danger p-2 small mb-3">{{ modalError }}</div>
+        
+        <button type="submit" class="btn btn-primary w-100">Verificar</button>
+      </form>
+      
+      <div class="text-center mt-3">
+        <button class="btn btn-link small text-muted text-decoration-none" (click)="modalStep = 1">
+          Reenviar código
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="modalStep === 3">
+      <form [formGroup]="passwordForm" (ngSubmit)="submitNewPassword()">
+        
+        <div class="mb-3">
+          <label class="form-label custom-label">Nueva Contraseña</label>
+          
+          <div class="input-group">
+            <input 
+              [type]="showNewPassword ? 'text' : 'password'" 
+              class="form-control custom-input border-end-0" 
+              formControlName="newPassword" 
+              placeholder="••••••••">
+            
+            <button 
+              class="btn btn-outline-secondary border-start-0 bg-white" 
+              type="button" 
+              (click)="toggleNewPasswordVisibility()"
+              [attr.aria-label]="showNewPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+                <i class="bi" [ngClass]="showNewPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'"></i>
+            </button>
+          </div>
+
+          <div class="password-requirements mt-2 p-2 rounded bg-light border">
+              <p class="mb-1 small fw-bold text-muted">Requisitos:</p>
+              
+              <div class="req-item" [class.valid]="passwordForm.get('newPassword')?.value?.length >= 8">
+                  <i class="bi" [ngClass]="passwordForm.get('newPassword')?.value?.length >= 8 ? 'bi-check-circle-fill text-success' : 'bi-circle text-muted'"></i>
+                  <span>Mínimo 8 caracteres</span>
+              </div>
+              
+              <div class="req-item" [class.valid]="passwordCriteria.hasNumber">
+                  <i class="bi" [ngClass]="passwordCriteria.hasNumber ? 'bi-check-circle-fill text-success' : 'bi-circle text-muted'"></i>
+                  <span>1 número</span>
+              </div>
+              
+              <div class="req-item" [class.valid]="passwordCriteria.hasUpper">
+                  <i class="bi" [ngClass]="passwordCriteria.hasUpper ? 'bi-check-circle-fill text-success' : 'bi-circle text-muted'"></i>
+                  <span>1 mayúscula</span>
+              </div>
+              
+              <div class="req-item" [class.valid]="passwordCriteria.hasSpecial">
+                  <i class="bi" [ngClass]="passwordCriteria.hasSpecial ? 'bi-check-circle-fill text-success' : 'bi-circle text-muted'"></i>
+                  <span>1 carácter especial (@#%&)</span>
+              </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label custom-label">Confirmar Contraseña</label>
+          <input 
+            [type]="showNewPassword ? 'text' : 'password'" 
+            class="form-control custom-input" 
+            formControlName="confirmPassword" 
+            placeholder="••••••••">
+        </div>
+
+        <div *ngIf="modalError" class="alert alert-danger p-2 small mb-3">{{ modalError }}</div>
+        <div *ngIf="modalSuccess" class="alert alert-success p-2 small mb-3">{{ modalSuccess }}</div>
+
+        <button type="submit" class="btn btn-primary w-100" [disabled]="isLoadingModal">
+          <span *ngIf="isLoadingModal" class="spinner-border spinner-border-sm me-2"></span>
+          Actualizar Contraseña
+        </button>
+      </form>
+    </div>
+
   </div>
 </div>
+
+<div class="custom-modal-overlay" *ngIf="showEmailModal">
+  <div class="custom-modal p-4" style="max-width: 450px;">
+    
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h5 class="fw-bold mb-0">Actualizar Correo</h5>
+      <button type="button" class="btn-close" (click)="closeEmailModal()"></button>
+    </div>
+
+    <div *ngIf="emailModalStep === 1">
+      <p class="text-muted small mb-3">
+        Ingresa la nueva dirección de correo electrónico. Te enviaremos un código de verificación para confirmar que es tuyo.
+      </p>
+      
+      <form [formGroup]="emailForm" (ngSubmit)="sendEmailCode()">
+        <div class="mb-3">
+          <label class="form-label custom-label">Nuevo Correo</label>
+          <input type="email" class="form-control custom-input" formControlName="newEmail" placeholder="nuevo@ejemplo.com">
+          <div *ngIf="emailForm.get('newEmail')?.invalid && emailForm.get('newEmail')?.touched" class="text-danger small mt-1">
+            Ingresa un correo válido.
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100" [disabled]="emailForm.get('newEmail')?.invalid || isLoadingModal">
+          <span *ngIf="isLoadingModal" class="spinner-border spinner-border-sm me-2"></span>
+          Enviar Código
+        </button>
+      </form>
+    </div>
+
+    <div *ngIf="emailModalStep === 2">
+      <div class="text-center mb-4">
+        <i class="bi bi-envelope-check text-primary" style="font-size: 2.5rem;"></i>
+        <p class="small text-muted mt-2">
+          Hemos enviado el código <strong>123456</strong> a <br>
+          <span class="fw-bold text-dark">{{ emailForm.get('newEmail')?.value }}</span>
+        </p>
+      </div>
+      
+      <form [formGroup]="emailForm" (ngSubmit)="verifyEmailAndSubmit()">
+        <div class="mb-3">
+          <label class="form-label custom-label">Código de Verificación</label>
+          <input type="text" 
+                 class="form-control custom-input text-center letter-spacing-2" 
+                 formControlName="verificationCode" 
+                 placeholder="000000" maxlength="6">
+        </div>
+        
+        <div *ngIf="modalError" class="alert alert-danger p-2 small mb-3">{{ modalError }}</div>
+        <div *ngIf="modalSuccess" class="alert alert-success p-2 small mb-3">{{ modalSuccess }}</div>
+        
+        <button type="submit" class="btn btn-primary w-100" [disabled]="isLoadingModal">
+          <span *ngIf="isLoadingModal" class="spinner-border spinner-border-sm me-2"></span>
+          Verificar y Guardar
+        </button>
+      </form>
+      
+      <div class="text-center mt-3">
+        <button class="btn btn-link small text-muted text-decoration-none" (click)="emailModalStep = 1">
+          Corregir correo
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+

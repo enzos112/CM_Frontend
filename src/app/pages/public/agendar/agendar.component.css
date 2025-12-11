@@ -1,0 +1,84 @@
+/* Layout General */
+.agendar-container {
+    min-height: 100vh;
+}
+
+/* Stepper (Barra de progreso superior) */
+.progress-indicator {
+    flex-grow: 1;
+}
+
+.progress-pill {
+    width: 30px;
+    height: 6px;
+    background-color: #e9ecef;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.progress-pill.active {
+    background-color: #0c8cb4; /* Color Corporativo */
+    width: 40px; /* Un poco más largo si está activo */
+}
+
+/* Tarjetas de Modalidad (Paso 1) */
+.modalidad-card {
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+    background: white;
+}
+
+.modalidad-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    border-color: #b3e0ee; /* Celeste muy suave */
+}
+
+.modalidad-card.selected {
+    border-color: #0c8cb4;
+    background-color: #f0f9fc; /* Fondo celeste muy tenue */
+    box-shadow: 0 4px 12px rgba(12, 140, 180, 0.15);
+}
+
+.icon-wrapper {
+    font-size: 2.5rem;
+    color: #0c8cb4;
+    line-height: 1;
+}
+
+.modalidad-card.selected .icon-wrapper {
+    color: #097699;
+    transform: scale(1.1);
+    transition: transform 0.2s;
+}
+
+/* Sidebar Resumen */
+.resumen-card {
+    /* El sticky funciona mejor si el contenedor padre tiene altura definida o es flex */
+}
+
+.resumen-icon {
+    font-size: 1.2rem;
+    width: 24px;
+    text-align: center;
+    color: #9ca3af; /* Gris suave */
+}
+
+.x-small {
+    font-size: 0.7rem;
+    letter-spacing: 0.5px;
+}
+
+/* Animaciones */
+.fade-in {
+    animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { environment } from '../../environments/environment'; // Asegúrate que la ruta sea correcta según tu estructura
+import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 export class AuthService {
   private apiUrl = `${environment.apiUrl}/auth`;
   
-  // "Radio" que emite el estado del usuario actual
+  // Fuente de verdad del usuario
   private userSubject = new BehaviorSubject<any>(this.getUserFromStorage());
   public user$ = this.userSubject.asObservable();
 
@@ -64,7 +64,7 @@ export class AuthService {
     return null;
   }
 
-  // --- AQUÍ ESTÁ LA CORRECCIÓN ---
+  // --- LÓGICA DE DECODIFICACIÓN Y MAPEO ---
   private decodeToken(token: string): any {
     try {
       const base64Url = token.split('.')[1];
@@ -76,11 +76,14 @@ export class AuthService {
 
       const payload = JSON.parse(jsonPayload);
 
-      // === PARCHE DE ROL ===
-      // Si el backend envía el rol por defecto 'USER', lo interpretamos como 'PACIENTE'
-      // para que la interfaz muestre las opciones correctas inmediatamente.
+      // PARCHE DE ROL: USER -> PACIENTE
       if (payload.role === 'USER') {
         payload.role = 'PACIENTE';
+      }
+
+      // IMPORTANTE: Asegurarnos de que el 'sub' (email) esté accesible como 'email'
+      if (!payload.email && payload.sub) {
+        payload.email = payload.sub;
       }
 
       return payload;
@@ -93,4 +96,38 @@ export class AuthService {
   getUser(): any {
     return this.userSubject.value;
   }
+
+  // Método para actualizar perfil
+  updateProfile(data: any): Observable<any> {
+    // El interceptor ya pone el token, así que no necesitamos headers manuales
+    return this.http.put(`${this.apiUrl.replace('/auth', '/usuario')}/perfil`, data).pipe(
+      tap((response: any) => {
+        if (response.token) {
+          // GUARDAMOS EL NUEVO TOKEN (que trae los datos actualizados)
+          this.saveToken(response.token); 
+        }
+      })
+    );
+  }
+
+  changePassword(newPassword: string): Observable<any> {
+    // Agregamos { responseType: 'text' } para que Angular acepte el string que devuelve Java
+    return this.http.put(
+      `${this.apiUrl.replace('/auth', '/usuario')}/change-password`, 
+      { newPassword },
+      { responseType: 'text' } 
+    );
+  }
+
+  changeEmail(newEmail: string): Observable<any> {
+    return this.http.put(`${this.apiUrl.replace('/auth', '/usuario')}/change-email`, { newEmail }).pipe(
+      tap((response: any) => {
+        if (response.token) {
+          // Guardamos el nuevo token inmediatamente para que la sesión no muera
+          this.saveToken(response.token);
+        }
+      })
+    );
+  }
+
 }
