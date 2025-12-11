@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { CitaService } from '../../../core/services/cita.service';
+import { CitaService } from '../../../../core/services/cita.service';
 
 @Component({
   selector: 'app-agendar',
@@ -13,19 +13,14 @@ import { CitaService } from '../../../core/services/cita.service';
 })
 export class AgendarComponent implements OnInit {
   agendarForm: FormGroup;
-  
-  // VARIABLES PARA EL HTML (VISUALES)
   currentStep: number = 1;
-  totalSteps: number = 9; // <--- Agregado para el stepper
-  selectedModalidad: string = ''; // <--- Agregado para selección visual de tarjetas
-  
   mensaje: string = '';
   error: string = '';
 
   // Listas de datos
   listaEspecialidades: any[] = [];
   listaMedicos: any[] = [];
-  medicosFiltrados: any[] = []; 
+  medicosFiltrados: any[] = []; // Para mostrar en el select
 
   // Horarios
   horariosGenerados: string[] = [];
@@ -38,7 +33,7 @@ export class AgendarComponent implements OnInit {
     private router: Router
   ) {
     this.agendarForm = this.fb.group({
-      modalidadId: ['', Validators.required], // Inicialmente vacío
+      modalidadId: [1, Validators.required],
       especialidadId: ['', Validators.required],
       medicoId: ['', Validators.required],
       fechaDia: ['', Validators.required],
@@ -48,40 +43,62 @@ export class AgendarComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log('1. Iniciando AgendarComponent...');
     this.cargarCatalogos();
     this.generarGrillaHorarios();
 
-    // Filtro de médicos
+    // LOGIC: Filtro de médicos al cambiar especialidad
     this.agendarForm.get('especialidadId')?.valueChanges.subscribe(espId => {
+      console.log('⚡ Cambio Especialidad ID:', espId);
       if (espId) {
+        // Filtramos la lista completa de médicos
         this.medicosFiltrados = this.listaMedicos.filter(m => {
+             // Verificamos si la propiedad es idEspecialidad o id_especialidad (ajuste dinámico)
              const idEspMedico = m.idEspecialidad || m.especialidad?.idEspecialidad; 
              return idEspMedico == espId;
         });
+        console.log('   -> Médicos filtrados:', this.medicosFiltrados.length);
       }
       this.agendarForm.patchValue({ medicoId: '' });
     });
 
-    // Horarios ocupados
+    // LOGIC: Buscar horarios ocupados
     this.agendarForm.get('fechaDia')?.valueChanges.subscribe(() => this.buscarOcupados());
     this.agendarForm.get('medicoId')?.valueChanges.subscribe(() => this.buscarOcupados());
   }
 
   cargarCatalogos() {
+    console.log('2. Solicitando catálogos al Backend...');
+
+    // 1. Especialidades
     this.citaService.getEspecialidades().subscribe({
-      next: (data: any) => this.listaEspecialidades = data,
-      error: (err: any) => console.error('Error Especialidades:', err)
+      next: (data) => {
+        console.log('✅ Especialidades recibidas:', data);
+        this.listaEspecialidades = data;
+      },
+      error: (err) => console.error('❌ Error cargando Especialidades:', err)
     });
 
+    // 2. Médicos
     this.citaService.getMedicos().subscribe({
-      next: (data: any) => {
+      next: (data) => {
+        console.log('✅ Médicos recibidos (RAW):', data);
+        
+        // Diagnóstico de estructura
+        if (data.length > 0) {
+          console.log('   Ejemplo Médico [0]:', data[0]);
+        } else {
+          console.warn('⚠️ La lista de médicos llegó vacía desde el Backend.');
+        }
+
         this.listaMedicos = data;
-        this.medicosFiltrados = data; 
+        this.medicosFiltrados = data; // Inicialmente mostramos todos (o vacio)
       },
-      error: (err: any) => console.error('Error Médicos:', err)
+      error: (err) => console.error('❌ Error cargando Médicos:', err)
     });
   }
 
+  // --- LÓGICA DE HORARIOS ---
   generarGrillaHorarios() {
     let hora = 8;
     let min = 0;
@@ -99,9 +116,13 @@ export class AgendarComponent implements OnInit {
     const fecha = this.agendarForm.get('fechaDia')?.value;
 
     if (medicoId && fecha) {
+      console.log(`🔎 Buscando horarios ocupados Medico: ${medicoId}, Fecha: ${fecha}`);
       this.citaService.getHorariosOcupados(medicoId, fecha).subscribe({
-        next: (ocupados: any[]) => this.horariosOcupados = ocupados.map((h: string) => h.substring(0, 5)),
-        error: (err: any) => console.error('Error horarios:', err)
+        next: (ocupados) => {
+            console.log('   -> Ocupados:', ocupados);
+            this.horariosOcupados = ocupados.map(h => h.substring(0, 5));
+        },
+        error: (err) => console.error('Error buscando horarios', err)
       });
     }
   }
@@ -113,27 +134,15 @@ export class AgendarComponent implements OnInit {
     }
   }
 
-  // --- LÓGICA DEL PASO 1 (MODALIDAD) ---
-  
-  // Esta función recibe el STRING del HTML ('CONSULTORIO')
-  selectModalidad(tipo: string) {
-    this.selectedModalidad = tipo; // Actualiza visualmente la tarjeta (borde azul)
-    
-    // Mapeamos el string visual al ID numérico que espera el Backend
-    let idBackend = 1; 
-    if (tipo === 'DOMICILIO') idBackend = 2;
-    if (tipo === 'VIRTUAL') idBackend = 3;
-
-    console.log(`Modalidad seleccionada: ${tipo} (ID: ${idBackend})`);
-    
-    this.agendarForm.patchValue({ modalidadId: idBackend });
-    
-    // Avanzamos al siguiente paso automáticamente (opcional)
-    setTimeout(() => this.nextStep(), 400); 
+  // --- WIZARD NAVIGATION ---
+  selectModalidad(id: number) {
+    console.log(`3. Seleccionada modalidad ID: ${id}`);
+    this.agendarForm.patchValue({ modalidadId: id });
+    this.nextStep();
   }
 
   nextStep() {
-    if (this.currentStep < this.totalSteps) {
+    if (this.currentStep < 3) {
       this.currentStep++;
     }
   }
@@ -154,13 +163,17 @@ export class AgendarComponent implements OnInit {
         fechaHora: fechaCompleta
       };
 
+      console.log('📤 Enviando Cita:', payload);
+
       this.citaService.agendarCita(payload).subscribe({
-        next: (res: any) => {
+        next: (res) => {
+          console.log('🎉 Cita agendada:', res);
           this.mensaje = '¡Cita reservada con éxito!';
-          setTimeout(() => this.router.navigate(['/']), 2000);
+          setTimeout(() => this.router.navigate(['/']), 2000); // Volver al home después de agendar
         },
-        error: (err: any) => {
-          this.error = 'Ocurrió un error al agendar.';
+        error: (err) => {
+          console.error('❌ Error al agendar:', err);
+          this.error = 'Ocurrió un error al agendar. Intenta nuevamente.';
         }
       });
     } else {

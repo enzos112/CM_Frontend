@@ -1,0 +1,28 @@
+<div class="top-bar d-flex justify-content-end mb-4">
+    <div class="avatar-circle" title="Admin">M</div>
+</div>
+
+<div class="page-header d-flex justify-content-between align-items-end mb-4">
+    <div>
+        <h1 class="page-title fw-bold text-dark m-0">Mis Horarios</h1>
+        <p class="text-muted small m-0">Gestiona tu disponibilidad semanal</p>
+    </div>
+    <span class="current-date text-secondary">
+        {{ currentDate | date: "EEEE, d 'de' MMMM 'de' y" : '' : 'es-ES' }}
+    </span>
+</div>
+
+<div class="card border-0 shadow-sm p-4">
+    
+    <div *ngIf="horarios.length === 0" class="text-center py-5">
+        <div class="mb-3 text-muted">
+            <i class="bi bi-calendar-x display-1"></i>
+        </div>
+        <h5 class="fw-bold text-secondary">No tienes horarios configurados</h5>
+        <p class="text-muted">Empieza agregando tus turnos de atención.</p>
+        <button class="btn btn-primary mt-2">
+            <i class="bi bi-plus-lg"></i> Nuevo Horario
+        </button>
+    </div>
+
+</div>

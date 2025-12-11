@@ -1,0 +1,81 @@
+/* --- LAYOUT PRINCIPAL (CONTENEDOR PADRE) --- */
+.dashboard-wrapper {
+    display: flex;       /* <--- ¡ESTO ES LO MÁS IMPORTANTE! */
+    height: 100vh;       /* Ocupar toda la altura de la pantalla */
+    overflow: hidden;    /* Evitar scrollbars dobles */
+    background-color: #f5f7f9; /* Fondo gris suave general */
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* --- SIDEBAR (IZQUIERDA) --- */
+.sidebar {
+    width: 260px;        /* Ancho fijo para el menú */
+    background-color: #ffffff;
+    border-right: 1px solid #eef0f2;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    flex-shrink: 0;      /* Evita que se aplaste si la pantalla es chica */
+    overflow-y: auto;    /* Scroll interno si el menú es muy largo */
+}
+
+/* Marca / Logo */
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #1e293b;
+    margin-bottom: 3rem;
+}
+
+.logo-icon {
+    font-size: 1.5rem;
+    color: #1D82A6; /* Azul corporativo */
+}
+
+/* Enlaces del Menú */
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 15px;
+    color: #64748b;
+    text-decoration: none;
+    font-weight: 500;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    width: 100%;
+    text-align: left;
+}
+
+.menu-item:hover {
+    background-color: #f8fafc;
+    color: #1D82A6;
+}
+
+.menu-item.active {
+    background-color: #eff6ff; /* Fondo azul muy claro para el activo */
+    color: #1D82A6;
+    font-weight: 600;
+}
+
+/* Footer del Sidebar */
+.sidebar-footer {
+    margin-top: auto; /* Empuja esto al fondo */
+    padding-top: 1rem;
+    border-top: 1px solid #f1f5f9;
+}
+
+/* --- CONTENIDO PRINCIPAL (DERECHA) --- */
+.main-content {
+    flex-grow: 1;        /* Ocupa todo el espacio restante */
+    padding: 2rem 3rem;  /* Espaciado interno */
+    overflow-y: auto;    /* Scroll independiente para el contenido */
+    position: relative;
+}

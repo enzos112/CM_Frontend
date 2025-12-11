@@ -57,7 +57,7 @@ export class LoginComponent {
         
         // Redirección inteligente
         if (usuarioActual?.role === 'ADMIN' || usuarioActual?.role === 'MEDICO') {
-          this.router.navigate(['/intranet/dashboard']);
+          this.router.navigate(['/admin-panel/dashboard']);
         } else {
           this.router.navigate(['/']); // Home para pacientes
         }

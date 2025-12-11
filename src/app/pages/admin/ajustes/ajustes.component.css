@@ -1,0 +1,66 @@
+/* Contenedor principal */
+.page-content {
+  padding: 20px 0;
+}
+
+.page-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 1.5rem;
+}
+
+/* Tarjeta de Ajustes */
+.settings-card {
+  border: 1px solid #eef0f2;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+  background-color: white;
+}
+
+/* Ítems individuales */
+.setting-item {
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  background-color: #fff;
+}
+
+.setting-label {
+  font-weight: 600;
+  color: #343a40;
+  margin-bottom: 0.2rem;
+  font-size: 1rem;
+}
+
+.setting-desc {
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* Personalización del Toggle Switch (Interruptor) */
+.form-check-input.custom-switch {
+  width: 3em;      /* Más ancho */
+  height: 1.5em;   /* Más alto */
+  cursor: pointer;
+}
+
+/* Color cuando está activo (checked) */
+.form-check-input.custom-switch:checked {
+  background-color: #1D82A6; /* Tu color corporativo */
+  border-color: #1D82A6;
+}
+
+/* Ajuste del botón Guardar */
+.btn-primary {
+  background-color: #1D82A6;
+  border-color: #1D82A6;
+  font-weight: 500;
+}
+
+.btn-primary:hover {
+  background-color: #156a87;
+  border-color: #156a87;
+}

@@ -1,0 +1,39 @@
+<div class="dashboard-wrapper">
+    <nav class="sidebar">
+        <div class="brand">
+            <i class="bi bi-layers logo-icon"></i>
+            Portal Médico
+        </div>
+
+        <div class="d-flex flex-column">
+            <a routerLink="/admin-panel/dashboard" routerLinkActive="active" class="menu-item">
+                <i class="bi bi-calendar-check"></i> Mis Citas
+            </a>
+            <a routerLink="/admin-panel/horarios" routerLinkActive="active" class="menu-item">
+                <i class="bi bi-clock"></i> Mis Horarios
+            </a>
+            <a routerLink="/admin-panel/perfil" routerLinkActive="active" class="menu-item">
+                <i class="bi bi-person"></i> Mi Perfil
+            </a>
+            <a routerLink="/admin-panel/ajustes" routerLinkActive="active" class="menu-item">
+                <i class="bi bi-gear"></i> Ajustes
+            </a>
+            <a routerLink="/admin-panel/seguridad" routerLinkActive="active" class="menu-item">
+                <i class="bi bi-shield-check"></i> Seguridad
+            </a>
+        </div>
+
+        <div class="sidebar-footer">
+            <a routerLink="/" class="menu-item">
+                <i class="bi bi-house"></i> Ir al Home
+            </a>
+            <button (click)="logout()" class="menu-item w-100 border-0 bg-transparent text-start">
+                <i class="bi bi-box-arrow-left"></i> Cerrar Sesión
+            </button>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <router-outlet></router-outlet>
+    </main>
+</div>

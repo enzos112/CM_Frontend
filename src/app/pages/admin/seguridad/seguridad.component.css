@@ -1,0 +1,40 @@
+/* Contenedor Principal */
+.page-content {
+  padding: 20px 0;
+}
+
+.page-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 1.5rem;
+}
+
+/* Tarjeta de Seguridad */
+.security-card {
+  border: 1px solid #eef0f2;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+  background-color: white;
+  min-height: 200px; /* Para que no se vea tan delgada */
+}
+
+/* Tipografía */
+.text-muted {
+  color: #6c757d !important;
+  font-size: 0.9rem;
+}
+
+/* Botón Personalizado (Color Corporativo) */
+.btn-primary {
+  background-color: #1D82A6;
+  border-color: #1D82A6;
+  font-weight: 500;
+  padding: 0.6rem 1.5rem; /* Un poco más grande el padding */
+  border-radius: 6px;
+}
+
+.btn-primary:hover {
+  background-color: #156a87;
+  border-color: #156a87;
+}

@@ -1,0 +1,47 @@
+<div class="top-bar">
+    <div class="avatar-circle" title="Perfil de Usuario">
+        M
+    </div>
+</div>
+
+<div class="page-header">
+    <h1 class="page-title">Mis Citas de Hoy</h1>
+    <span class="current-date">
+        {{ currentDate | date: "EEEE, d 'de' MMMM 'de' y" : '' : 'es-ES' }}
+    </span>
+</div>
+
+<div class="filters-container">
+    <button class="filter-btn" [class.active]="filtroActual === 'Todas'" (click)="setFiltro('Todas')">Todas</button>
+    <button class="filter-btn" [class.active]="filtroActual === 'Confirmadas'" (click)="setFiltro('Confirmadas')">Confirmadas</button>
+    <button class="filter-btn" [class.active]="filtroActual === 'Atendidas'" (click)="setFiltro('Atendidas')">Atendidas</button>
+    <button class="filter-btn" [class.active]="filtroActual === 'Reprogramadas'" (click)="setFiltro('Reprogramadas')">Reprogramadas</button>
+    <button class="filter-btn" [class.active]="filtroActual === 'Canceladas'" (click)="setFiltro('Canceladas')">Canceladas</button>
+</div>
+
+<div class="content-body">
+
+    <div *ngIf="loading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status"></div>
+    </div>
+
+    <div *ngIf="!loading && citasFiltradas.length === 0" class="empty-state">
+        <p>No hay citas que coincidan con el filtro seleccionado.</p>
+    </div>
+
+    <div *ngIf="!loading && citasFiltradas.length > 0">
+        <div class="card-cita" *ngFor="let cita of citasFiltradas">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="mb-1 fw-bold">{{ cita.nombreMedico }}</h5>
+                    <span class="text-muted small">{{ cita.especialidad }}</span>
+                </div>
+                <div class="text-end">
+                    <div class="hora-badge">{{ cita.hora }}</div>
+                    <small [class]="'estado-text ' + cita.estado?.toLowerCase()">{{ cita.estado }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
