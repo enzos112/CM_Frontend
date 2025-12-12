@@ -26,10 +26,12 @@ export class CitaService {
   }
 
   // 3. Listar mis citas (Para el Dashboard futuro)
-  misCitas(): Observable<any[]> {
+  getMisCitas(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/citas/mis-citas`);
   }
   getHorariosOcupados(medicoId: number, fecha: string): Observable<string[]> {
     return this.http.get<string[]>(`${this.apiUrl}/citas/horarios-ocupados?medicoId=${medicoId}&fecha=${fecha}`);
   }
+
+  
 }

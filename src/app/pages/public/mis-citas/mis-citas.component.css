@@ -1,0 +1,52 @@
+/* Cards de Citas */
+.cita-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid #f1f3f5 !important;
+}
+.cita-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.06) !important;
+    border-color: #e9ecef !important;
+}
+
+/* Caja de Fecha */
+.date-box {
+    min-width: 90px;
+    border: 1px solid #e9ecef;
+}
+
+/* FILTROS (Tarjetas Superiores) */
+.filter-card {
+    transition: all 0.2s ease;
+    border: 1px solid #f1f3f5 !important;
+}
+.filter-card:hover {
+    transform: translateY(-2px);
+    border-color: #dee2e6 !important;
+}
+.filter-card.active {
+    border-color: #0c8cb4 !important;
+    background-color: #f0f9fc !important;
+    box-shadow: 0 4px 12px rgba(12, 140, 180, 0.1) !important;
+}
+.filter-card.active .text-dark { color: #0c8cb4 !important; }
+
+/* Iconos de filtro */
+.icon-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+/* Animación */
+.fade-in { animation: fadeIn 0.4s ease-out; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Helpers */
+.cursor-pointer { cursor: pointer; }
+.tracking-wide { letter-spacing: 1px; }
+.x-small { font-size: 0.75rem; }

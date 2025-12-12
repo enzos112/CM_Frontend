@@ -5,69 +5,494 @@
       <div class="col-lg-8">
         <div class="wizard-card shadow-sm bg-white p-4 p-md-5 rounded-4 border-0">
           
-          <div class="d-flex align-items-center justify-content-between mb-4">
-            <div class="progress-indicator d-flex gap-2">
-              <div class="progress-pill" [class.active]="currentStep >= 1"></div>
-              <div class="progress-pill" [class.active]="currentStep >= 2"></div>
-              <div class="progress-pill" [class.active]="currentStep >= 3"></div>
-              <div class="progress-pill" [class.active]="currentStep >= 4"></div>
-              <div class="progress-pill" [class.active]="currentStep >= 5"></div>
-              <div class="progress-pill" [class.active]="currentStep >= 6"></div>
-              <div class="progress-pill" [class.active]="currentStep >= 7"></div>
-              <div class="progress-pill" [class.active]="currentStep >= 8"></div>
-              <div class="progress-pill" [class.active]="currentStep >= 9"></div>
+          <div class="mb-5">
+            <div class="text-center mb-3">
+              <span class="text-muted small fw-bold text-uppercase tracking-wide">
+                Paso {{ currentStep }} de {{ isDomicilio ? 10 : 9 }}
+              </span>
             </div>
-            <span class="text-muted small fw-semibold">Paso {{ currentStep }} de {{ totalSteps }}</span>
+            <div class="progress-indicator d-flex gap-2">
+              <div *ngFor="let step of [1,2,3,4,5,6,7,8,9,10]" 
+                   class="progress-pill" 
+                   [class.active]="currentStep >= step"
+                   [class.current]="currentStep === step"
+                   [style.display]="(step === 6 && !isDomicilio) ? 'none' : 'block'"> 
+              </div>
+            </div>
           </div>
 
           <div *ngIf="currentStep === 1" class="fade-in">
-            <h3 class="text-center fw-bold text-dark mb-5">Seleccione la modalidad de la cita</h3>
-            
+            <div class="text-center mb-5">
+              <h3 class="fw-bold text-dark mb-2">¿Cómo deseas ser atendido?</h3>
+              <p class="text-muted">Elige la modalidad que mejor se adapte a tus necesidades.</p>
+            </div>
             <div class="row g-4 justify-content-center">
-              
               <div class="col-md-4">
-                <div class="modalidad-card h-100" 
-                     [class.selected]="selectedModalidad === 'CONSULTORIO'"
-                     (click)="selectModalidad('CONSULTORIO')">
-                  <div class="icon-wrapper mb-3">
-                    <i class="bi bi-hospital"></i>
-                  </div>
-                  <h5 class="fw-bold mb-2">En consultorio</h5>
-                  <p class="text-muted small mb-0">Visítenos en nuestro centro médico equipado.</p>
+                <div class="modalidad-card h-100" [class.selected]="selectedModalidad === 'CONSULTORIO'" (click)="selectModalidad('CONSULTORIO')">
+                  <div class="icon-wrapper mb-3"><i class="bi bi-hospital"></i></div>
+                  <h6 class="fw-bold mb-2">En Consultorio</h6>
+                  <p class="text-muted small mb-0">Visita nuestras instalaciones equipadas.</p>
                 </div>
               </div>
-
               <div class="col-md-4">
-                <div class="modalidad-card h-100" 
-                     [class.selected]="selectedModalidad === 'DOMICILIO'"
-                     (click)="selectModalidad('DOMICILIO')">
-                  <div class="icon-wrapper mb-3">
-                    <i class="bi bi-house-heart"></i>
-                  </div>
-                  <h5 class="fw-bold mb-2">A Domicilio</h5>
-                  <p class="text-muted small mb-0">Reciba atención médica en la comodidad de su hogar.</p>
+                <div class="modalidad-card h-100" [class.selected]="selectedModalidad === 'DOMICILIO'" (click)="selectModalidad('DOMICILIO')">
+                  <div class="icon-wrapper mb-3"><i class="bi bi-house-heart"></i></div>
+                  <h6 class="fw-bold mb-2">A Domicilio</h6>
+                  <p class="text-muted small mb-0">El médico va hasta tu puerta.</p>
                 </div>
               </div>
-
               <div class="col-md-4">
-                <div class="modalidad-card h-100" 
-                     [class.selected]="selectedModalidad === 'VIRTUAL'"
-                     (click)="selectModalidad('VIRTUAL')">
-                  <div class="icon-wrapper mb-3">
-                    <i class="bi bi-camera-video"></i>
-                  </div>
-                  <h5 class="fw-bold mb-2">Virtual</h5>
-                  <p class="text-muted small mb-0">Consulta médica a través de videollamada segura.</p>
+                <div class="modalidad-card h-100" [class.selected]="selectedModalidad === 'VIRTUAL'" (click)="selectModalidad('VIRTUAL')">
+                  <div class="icon-wrapper mb-3"><i class="bi bi-camera-video"></i></div>
+                  <h6 class="fw-bold mb-2">Teleconsulta</h6>
+                  <p class="text-muted small mb-0">Atención remota por video.</p>
                 </div>
               </div>
-
             </div>
           </div>
 
           <div *ngIf="currentStep === 2" class="fade-in">
-            <h3>Paso 2: Especialidad</h3>
-            <p>Aquí irá la selección de especialidades...</p>
-            <button class="btn btn-secondary" (click)="currentStep = 1">Atrás</button>
+            <div class="d-flex align-items-center justify-content-between mb-4">
+              <button class="btn btn-outline-secondary btn-sm" (click)="prevStep()">
+                <i class="bi bi-arrow-left me-1"></i> Atrás
+              </button>
+              <h4 class="fw-bold text-dark m-0">Selecciona una Especialidad</h4>
+              <div style="width: 70px;"></div>
+            </div>
+            
+            <div *ngIf="listaEspecialidades.length === 0" class="text-center py-5 text-muted">
+              <div class="spinner-border text-primary mb-3" role="status"></div>
+              <p>Cargando especialidades...</p>
+            </div>
+
+            <div class="row g-3">
+              <div class="col-md-4 col-sm-6" *ngFor="let esp of listaEspecialidades">
+                <div class="especialidad-card p-3 h-100 d-flex flex-column align-items-center justify-content-center text-center"
+                     [class.selected]="selectedEspecialidadId === esp.idEspecialidad"
+                     (click)="selectEspecialidad(esp)">
+                  <div class="esp-icon mb-2">
+                    <i class="bi bi-heart-pulse" *ngIf="esp.nombre.includes('Cardio')"></i>
+                    <i class="bi bi-lungs" *ngIf="esp.nombre.includes('Neumo')"></i>
+                    <i class="bi bi-emoji-smile" *ngIf="esp.nombre.includes('Pedia')"></i>
+                    <i class="bi bi-person-check" *ngIf="!esp.nombre.includes('Cardio') && !esp.nombre.includes('Neumo')"></i>
+                  </div>
+                  <h6 class="fw-bold m-0 small">{{ esp.nombre }}</h6>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="currentStep === 3" class="fade-in">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+              <button class="btn btn-outline-secondary btn-sm" (click)="prevStep()">
+                <i class="bi bi-arrow-left me-1"></i> Atrás
+              </button>
+              <h4 class="fw-bold text-dark m-0">Elige a tu Médico</h4>
+              <div style="width: 70px;"></div>
+            </div>
+
+            <div *ngIf="medicosFiltrados.length === 0" class="text-center py-5 bg-light rounded-3">
+              <div class="mb-3 text-muted" style="font-size: 3rem;"><i class="bi bi-person-x"></i></div>
+              <h6 class="fw-bold text-muted">No hay médicos disponibles</h6>
+              <p class="small text-muted mb-0">Intenta seleccionar otra especialidad.</p>
+            </div>
+
+            <div class="row g-3">
+              <div class="col-md-6" *ngFor="let med of medicosFiltrados">
+                <div class="medico-card p-3 h-100 d-flex align-items-center gap-3"
+                     [class.selected]="selectedMedicoId === med.idMedico"
+                     (click)="selectMedico(med)">
+                  <div class="medico-avatar">
+                    <span class="initials">{{ med.nombreCompleto?.charAt(0) || 'D' }}</span>
+                  </div>
+                  <div class="flex-grow-1">
+                    <h6 class="fw-bold text-dark mb-1">{{ med.nombreCompleto }}</h6>
+                    <div class="d-flex align-items-center text-muted small mb-1">
+                      <i class="bi bi-postcard me-2"></i> CMP: {{ med.cmp }}
+                    </div>
+                    <span class="badge bg-light text-secondary border fw-normal">
+                      {{ resumen.especialidad }}
+                    </span>
+                  </div>
+                  <div class="selection-check" *ngIf="selectedMedicoId === med.idMedico">
+                    <i class="bi bi-check-circle-fill text-primary fs-4"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="currentStep === 4" class="fade-in">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+              <button class="btn btn-outline-secondary btn-sm" (click)="prevStep()">
+                <i class="bi bi-arrow-left me-1"></i> Atrás
+              </button>
+              <h4 class="fw-bold text-dark m-0">Elige Fecha y Hora</h4>
+              <button class="btn btn-primary btn-sm px-4" [disabled]="!horaSeleccionada" (click)="nextStep()">
+                Siguiente <i class="bi bi-arrow-right ms-1"></i>
+              </button>
+            </div>
+
+            <div class="row g-4">
+              <div class="col-md-6">
+                <div class="custom-calendar-card p-3 border rounded-4 bg-white">
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <button class="btn btn-sm btn-light rounded-circle" (click)="changeMonth(-1)" [disabled]="!canGoBack"><i class="bi bi-chevron-left"></i></button>
+                    <h6 class="fw-bold m-0 text-capitalize text-primary">{{ monthNames[currentMonthDate.getMonth()] }} {{ currentMonthDate.getFullYear() }}</h6>
+                    <button class="btn btn-sm btn-light rounded-circle" (click)="changeMonth(1)" [disabled]="!canGoNext"><i class="bi bi-chevron-right"></i></button>
+                  </div>
+                  <div class="calendar-grid-header mb-2">
+                    <div *ngFor="let day of weekDays" class="text-center x-small text-muted fw-bold">{{ day }}</div>
+                  </div>
+                  <div class="calendar-grid">
+                    <div *ngFor="let dayObj of calendarDays" 
+                         class="calendar-day text-center"
+                         [class.empty]="!dayObj.day"
+                         [class.disabled]="dayObj.disabled"
+                         [class.today]="dayObj.isToday"
+                         [class.selected]="dayObj.date && isSelectedDate(dayObj.date)"
+                         (click)="selectDate(dayObj)">
+                      {{ dayObj.day }}
+                    </div>
+                  </div>
+                </div>
+                <div class="mt-2 text-center">
+                  <span class="badge bg-light text-muted border fw-normal x-small">
+                    <i class="bi bi-info-circle me-1"></i> Disponibilidad a 30 días
+                  </span>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="bg-light-subtle p-3 rounded-4 h-100">
+                  <h6 class="fw-bold text-dark mb-3 small text-uppercase"><i class="bi bi-clock me-1"></i> Horarios Disponibles</h6>
+                  <div *ngIf="!selectedDateObj" class="text-center py-5 text-muted">
+                    <i class="bi bi-calendar-touch fs-1 opacity-50"></i>
+                    <p class="small mt-2">Selecciona un día en el calendario.</p>
+                  </div>
+                  <div *ngIf="selectedDateObj" class="slots-grid">
+                    <button *ngFor="let hora of horariosGenerados" 
+                            class="btn btn-slot"
+                            [class.selected]="horaSeleccionada === hora"
+                            [class.occupied]="horariosOcupados.includes(hora)"
+                            [disabled]="horariosOcupados.includes(hora)"
+                            (click)="selectHora(hora)">
+                      {{ hora }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="currentStep === 5" class="fade-in">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+              <button class="btn btn-outline-secondary btn-sm" (click)="prevStep()">
+                <i class="bi bi-arrow-left me-1"></i> Atrás
+              </button>
+              <h4 class="fw-bold text-dark m-0">¿Para quién es la cita?</h4>
+              
+              <button class="btn btn-primary btn-sm px-4" 
+                      [disabled]="agendarForm.get('esParaTercero')?.value && (agendarForm.get('pacienteNombre')?.invalid || agendarForm.get('pacienteDni')?.invalid)"
+                      (click)="nextStep()">
+                Siguiente <i class="bi bi-arrow-right ms-1"></i>
+              </button>
+            </div>
+
+            <div class="row g-4 justify-content-center mb-4">
+              <div class="col-md-5">
+                <div class="paciente-card h-100 p-4" [class.selected]="!agendarForm.get('esParaTercero')?.value" (click)="selectPacienteOption(false)">
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="avatar-circle bg-primary-subtle text-primary"><i class="bi bi-person-fill fs-4"></i></div>
+                    <div class="text-start"><h6 class="fw-bold mb-1">Para mí</h6><p class="text-muted small mb-0">Usar mis datos de perfil.</p></div>
+                    <div class="ms-auto" *ngIf="!agendarForm.get('esParaTercero')?.value"><i class="bi bi-check-circle-fill text-primary fs-4"></i></div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-5">
+                <div class="paciente-card h-100 p-4" [class.selected]="agendarForm.get('esParaTercero')?.value" (click)="selectPacienteOption(true)">
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="avatar-circle bg-light text-muted"><i class="bi bi-person-plus-fill fs-4"></i></div>
+                    <div class="text-start"><h6 class="fw-bold mb-1">Para otra persona</h6><p class="text-muted small mb-0">Familiar o amigo.</p></div>
+                    <div class="ms-auto" *ngIf="agendarForm.get('esParaTercero')?.value"><i class="bi bi-check-circle-fill text-primary fs-4"></i></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="agendarForm.get('esParaTercero')?.value" class="fade-in mt-4">
+              <div class="bg-white p-4 rounded-4 border border-dashed shadow-sm">
+                <h5 class="fw-bold text-dark mb-4 text-center">Información del Paciente</h5>
+                <div class="row g-3" [formGroup]="agendarForm">
+                  <div class="col-md-6 text-start"><label class="form-label custom-label fw-bold small">Nombres</label><input type="text" class="form-control bg-light" formControlName="pacienteNombre" placeholder="Ej: Juan" (input)="onPacienteInput()"></div>
+                  <div class="col-md-6 text-start"><label class="form-label custom-label fw-bold small">Apellidos</label><input type="text" class="form-control bg-light" formControlName="pacienteApellido" placeholder="Ej: Pérez Gonzales" (input)="onPacienteInput()"></div>
+                  <div class="col-12 text-start"><label class="form-label custom-label fw-bold small">DNI</label><input type="text" class="form-control bg-light" formControlName="pacienteDni" placeholder="Ej: 12345678" maxlength="8"></div>
+                  <div class="col-12 text-start"><label class="form-label custom-label fw-bold small">Correo electrónico</label><input type="email" class="form-control bg-light" formControlName="pacienteEmail" placeholder="Ej: juan.perez@correo.com"></div>
+                  <div class="col-12 text-start"><label class="form-label custom-label fw-bold small">Número de teléfono</label><input type="text" class="form-control bg-light" formControlName="pacienteTelefono" placeholder="Ej: 987654321" maxlength="9"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="currentStep === 6" class="fade-in">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+              <button class="btn btn-outline-secondary btn-sm" (click)="prevStep()">
+                <i class="bi bi-arrow-left me-1"></i> Atrás
+              </button>
+              <h4 class="fw-bold text-dark m-0">Ubicación de Visita</h4>
+              <button class="btn btn-primary btn-sm px-4" 
+                      [disabled]="agendarForm.get('distrito')?.invalid || agendarForm.get('direccionExacta')?.invalid" 
+                      (click)="nextStep()">
+                Siguiente <i class="bi bi-arrow-right ms-1"></i>
+              </button>
+            </div>
+
+            <div class="bg-warning-subtle p-4 rounded-4 border border-warning-subtle" [formGroup]="agendarForm">
+              <div class="d-flex gap-3 mb-4 align-items-center">
+                 <div class="bg-white rounded-circle p-2 d-flex align-items-center justify-content-center shadow-sm" style="width: 54px; height: 54px;">
+                    <i class="bi bi-geo-alt-fill fs-3 text-warning"></i>
+                 </div>
+                 <div>
+                   <h6 class="fw-bold text-dark m-0 fs-5">Dirección de Atención</h6>
+                   <p class="text-muted m-0 small">El médico se dirigirá a esta ubicación en Trujillo.</p>
+                 </div>
+              </div>
+
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label fw-bold small text-dark">Distrito (Trujillo)</label>
+                  <select class="form-select form-control-lg bg-white border-0 shadow-sm custom-input" formControlName="distrito" (change)="onUbicacionChange()">
+                    <option value="" disabled selected>Seleccione un distrito...</option>
+                    <option *ngFor="let dist of distritosTrujillo" [value]="dist">{{ dist }}</option>
+                  </select>
+                </div>
+
+                <div class="col-md-12">
+                  <label class="form-label fw-bold small text-dark">Dirección Exacta</label>
+                  <input type="text" 
+                         class="form-control form-control-lg bg-white border-0 shadow-sm custom-input" 
+                         formControlName="direccionExacta" 
+                         placeholder="Ej. Av. Larco 123, Dpto 402, Urb. La Merced" 
+                         (input)="onUbicacionChange()">
+                </div>
+
+                <div class="col-md-12">
+                  <label class="form-label fw-bold small text-dark">Referencia (Opcional pero útil)</label>
+                  <input type="text" 
+                         class="form-control form-control-lg bg-white border-0 shadow-sm custom-input" 
+                         formControlName="referencia" 
+                         placeholder="Ej. Casa de 2 pisos color verde, frente al parque...">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="currentStep === 7" class="fade-in">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+              <button class="btn btn-outline-secondary btn-sm" (click)="prevStep()">
+                <i class="bi bi-arrow-left me-1"></i> Atrás
+              </button>
+              <h4 class="fw-bold text-dark m-0">Detalles de la Consulta</h4>
+              <button class="btn btn-primary btn-sm px-4" 
+                      [disabled]="agendarForm.get('motivoConsulta')?.invalid || agendarForm.get('peso')?.invalid || agendarForm.get('altura')?.invalid" 
+                      (click)="nextStep()">
+                Siguiente <i class="bi bi-arrow-right ms-1"></i>
+              </button>
+            </div>
+
+            <div class="row g-4" [formGroup]="agendarForm">
+              <div class="col-md-7">
+                <div class="bg-white p-4 rounded-4 border shadow-sm h-100">
+                  <h6 class="fw-bold text-dark mb-3">
+                    <i class="bi bi-chat-square-text me-2 text-primary"></i>Motivo de Consulta <span class="text-danger">*</span>
+                  </h6>
+                  <textarea class="form-control bg-light border-0" 
+                            rows="5" 
+                            formControlName="motivoConsulta" 
+                            placeholder="Ej: Tengo dolor de cabeza persistente..." 
+                            (input)="onMedicalInfoChange()"></textarea>
+                  <div *ngIf="agendarForm.get('motivoConsulta')?.invalid && agendarForm.get('motivoConsulta')?.touched" class="text-danger x-small mt-2">
+                    <i class="bi bi-exclamation-circle me-1"></i> Mínimo 5 caracteres.
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-5">
+                <div class="bg-light-subtle p-4 rounded-4 h-100">
+                  <h6 class="fw-bold text-dark mb-3 small text-uppercase">
+                    <i class="bi bi-clipboard2-pulse me-2"></i>Datos de Salud (Opcional)
+                  </h6>
+                  <div class="row g-2 mb-3">
+                    <div class="col-6">
+                      <label class="form-label x-small text-muted fw-bold">Peso (kg)</label>
+                      <div class="input-group input-group-sm">
+                        <span class="input-group-text bg-white border-end-0"><i class="bi bi-speedometer2"></i></span>
+                        <input type="number" class="form-control border-start-0" formControlName="peso" placeholder="0.0" min="0" max="600" (keydown)="preventInvalidChars($event)">
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <label class="form-label x-small text-muted fw-bold">Altura (cm)</label>
+                      <div class="input-group input-group-sm">
+                        <span class="input-group-text bg-white border-end-0"><i class="bi bi-rulers"></i></span>
+                        <input type="number" class="form-control border-start-0" formControlName="altura" placeholder="0" min="0" max="300" (keydown)="preventInvalidChars($event)">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label x-small text-muted fw-bold">Alergias</label>
+                    <input type="text" class="form-control form-control-sm" formControlName="alergias" placeholder="Ej: Penicilina...">
+                  </div>
+                  <div class="mb-0">
+                    <label class="form-label x-small text-muted fw-bold">Antecedentes</label>
+                    <textarea class="form-control form-control-sm" rows="2" formControlName="antecedentes" placeholder="Ej: Diabetes..."></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="currentStep === 8" class="fade-in">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+              <button class="btn btn-outline-secondary btn-sm" (click)="prevStep()">
+                <i class="bi bi-arrow-left me-1"></i> Atrás
+              </button>
+              <h4 class="fw-bold text-dark m-0">Selecciona Método de Pago</h4>
+              <div style="width: 70px;"></div>
+            </div>
+
+            <div class="text-center mb-5">
+              <p class="text-muted">Elige cómo prefieres abonar tu consulta médica.</p>
+            </div>
+
+            <div class="row g-4 justify-content-center">
+              <div class="col-md-5">
+                <div class="pago-card h-100 p-4" 
+                     [class.selected]="agendarForm.get('tipoPago')?.value === 'ONLINE'"
+                     (click)="selectTipoPago('ONLINE')">
+                  <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div class="icon-box bg-primary-subtle text-primary"><i class="bi bi-credit-card-2-front-fill fs-3"></i></div>
+                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3">Recomendado</span>
+                  </div>
+                  <h5 class="fw-bold text-dark mb-2">Pagar Ahora (Online)</h5>
+                  <p class="text-muted small mb-3">Paga de forma segura con tu tarjeta.</p>
+                  <div class="d-flex gap-2 opacity-50">
+                    <i class="bi bi-credit-card fs-5"></i><i class="bi bi-paypal fs-5"></i><i class="bi bi-wallet2 fs-5"></i>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-5" *ngIf="isPresencialAllowed">
+                <div class="pago-card h-100 p-4" 
+                     [class.selected]="agendarForm.get('tipoPago')?.value === 'PRESENCIAL'"
+                     (click)="selectTipoPago('PRESENCIAL')">
+                  <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div class="icon-box bg-light text-muted"><i class="bi bi-cash-coin fs-3"></i></div>
+                  </div>
+                  <h5 class="fw-bold text-dark mb-2">Pagar en Clínica</h5>
+                  <p class="text-muted small mb-3">Paga en el mostrador el día de tu cita.</p>
+                  <div class="d-flex gap-2 opacity-50">
+                    <i class="bi bi-shop fs-5"></i><i class="bi bi-geo-alt fs-5"></i>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 text-center fade-in mt-3" *ngIf="!isPresencialAllowed">
+                <div class="alert alert-info d-inline-block px-4 py-2 border-0 bg-primary-subtle text-primary m-0">
+                  <i class="bi bi-info-circle-fill me-2"></i>
+                  <strong>Nota:</strong> Para la modalidad <span class="text-decoration-underline">{{ resumen.modalidad }}</span>, solo pago online.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="currentStep === 9" class="fade-in">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+              <button class="btn btn-outline-secondary btn-sm" (click)="prevStep()" [disabled]="isLoading">
+                <i class="bi bi-arrow-left me-1"></i> Atrás
+              </button>
+              <h4 class="fw-bold text-dark m-0">Confirma tu Cita</h4>
+              <div style="width: 70px;"></div>
+            </div>
+
+            <div class="confirmation-ticket bg-white border rounded-4 overflow-hidden mb-4 shadow-sm">
+              <div class="ticket-header bg-primary-subtle p-4 text-center">
+                <h6 class="text-primary fw-bold text-uppercase mb-2">Detalle de la Reserva</h6>
+                <div class="d-flex justify-content-center align-items-center gap-2">
+                  <i class="bi bi-calendar-check fs-4 text-dark"></i>
+                  <h4 class="fw-bold text-dark m-0">{{ resumen.fecha }}</h4>
+                </div>
+                <p class="text-muted m-0">{{ resumen.hora }}</p>
+              </div>
+
+              <div class="ticket-body p-4">
+                <div class="row g-4">
+                  <div class="col-md-6">
+                    <small class="text-muted text-uppercase fw-bold x-small">Médico</small>
+                    <h6 class="fw-bold text-dark m-0 mt-1">{{ resumen.medico }}</h6>
+                    <span class="text-muted small">{{ resumen.especialidad }}</span>
+                  </div>
+                  <div class="col-md-6">
+                    <small class="text-muted text-uppercase fw-bold x-small">Paciente</small>
+                    <h6 class="fw-bold text-dark m-0 mt-1">{{ resumen.paciente }}</h6>
+                    <span class="badge bg-light text-dark border fw-normal mt-1">{{ resumen.modalidad }}</span>
+                  </div>
+
+                  <div class="col-12" *ngIf="resumen.ubicacion">
+                    <small class="text-muted text-uppercase fw-bold x-small">Dirección Visita</small>
+                    <p class="fw-medium text-dark m-0 mt-1">
+                      <i class="bi bi-geo-alt me-2 text-danger"></i>{{ resumen.ubicacion }}
+                    </p>
+                  </div>
+
+                  <div class="col-12"><hr class="border-light-subtle my-2"></div>
+
+                  <div class="col-md-6">
+                    <small class="text-muted text-uppercase fw-bold x-small">Pago</small>
+                    <p class="fw-medium text-dark m-0 mt-1"><i class="bi bi-credit-card me-2"></i>{{ resumen.pago }}</p>
+                  </div>
+                  <div class="col-md-6">
+                    <small class="text-muted text-uppercase fw-bold x-small">Total</small>
+                    <p class="fw-bold text-primary fs-5 m-0 mt-1">S/ 80.00 <span class="text-muted fw-normal x-small ms-1">(Inc. IGV)</span></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-center">
+              <button class="btn btn-primary px-5 py-3 rounded-pill shadow-lg" (click)="submit()" [disabled]="isLoading">
+                <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+                <span *ngIf="!isLoading">Confirmar y Agendar Cita</span>
+              </button>
+              <div *ngIf="error" class="text-danger mt-3 small">{{ error }}</div>
+            </div>
+          </div>
+
+          <div *ngIf="currentStep === 10" class="fade-in text-center py-5">
+            
+            <div class="success-animation mb-4">
+              <div class="checkmark-circle">
+                <div class="background"></div>
+                <div class="checkmark draw"></div>
+              </div>
+            </div>
+            
+            <h2 class="fw-bold text-dark mb-3">¡Cita Agendada con Éxito!</h2>
+            
+            <p class="text-muted mb-5" style="max-width: 500px; margin: 0 auto;">
+              Hemos enviado los detalles de la confirmación a tu correo electrónico. 
+              Recuerda conectarte o llegar 10 minutos antes.
+            </p>
+
+            <div class="d-flex justify-content-center gap-3">
+              <button class="btn btn-outline-secondary px-4" routerLink="/home">
+                <i class="bi bi-house-door me-2"></i>Ir al Inicio
+              </button>
+              
+              <button class="btn btn-primary px-4" routerLink="/mis-citas">
+                <i class="bi bi-calendar2-check me-2"></i>Ver mis Citas
+              </button>
+            </div>
+
           </div>
 
         </div>
@@ -76,59 +501,16 @@
       <div class="col-lg-4">
         <div class="resumen-card shadow-sm bg-white p-4 rounded-4 border-0 sticky-top" style="top: 2rem; z-index: 10;">
           <h5 class="fw-bold mb-4 border-bottom pb-3">Resumen de tu Cita</h5>
-          
           <div class="resumen-list d-flex flex-column gap-3">
-            
-            <div class="resumen-item d-flex gap-3">
-              <div class="resumen-icon text-muted"><i class="bi bi-hospital"></i></div>
-              <div>
-                <small class="text-muted d-block text-uppercase x-small fw-bold">Modalidad</small>
-                <span class="fw-medium text-dark">{{ selectedModalidad || '...' }}</span>
-              </div>
-            </div>
-
-            <div class="resumen-item d-flex gap-3">
-              <div class="resumen-icon text-muted"><i class="bi bi-journal-medical"></i></div>
-              <div>
-                <small class="text-muted d-block text-uppercase x-small fw-bold">Especialidad</small>
-                <span class="fw-medium text-muted">...</span>
-              </div>
-            </div>
-
-            <div class="resumen-item d-flex gap-3">
-              <div class="resumen-icon text-muted"><i class="bi bi-person-badge"></i></div>
-              <div>
-                <small class="text-muted d-block text-uppercase x-small fw-bold">Médico</small>
-                <span class="fw-medium text-muted">...</span>
-              </div>
-            </div>
-
-            <div class="resumen-item d-flex gap-3">
-              <div class="resumen-icon text-muted"><i class="bi bi-calendar-event"></i></div>
-              <div>
-                <small class="text-muted d-block text-uppercase x-small fw-bold">Fecha y Hora</small>
-                <span class="fw-medium text-muted">...</span>
-              </div>
-            </div>
-
-            <hr class="my-1 border-light-subtle">
-
-            <div class="resumen-item d-flex gap-3">
-              <div class="resumen-icon text-muted"><i class="bi bi-person"></i></div>
-              <div>
-                <small class="text-muted d-block text-uppercase x-small fw-bold">Paciente</small>
-                <span class="fw-medium text-muted">...</span>
-              </div>
-            </div>
-
-            <div class="resumen-item d-flex gap-3">
-              <div class="resumen-icon text-muted"><i class="bi bi-credit-card"></i></div>
-              <div>
-                <small class="text-muted d-block text-uppercase x-small fw-bold">Pago</small>
-                <span class="fw-medium text-muted">...</span>
-              </div>
-            </div>
-
+             <div class="resumen-item d-flex gap-3"><div class="resumen-icon text-muted"><i class="bi bi-hospital"></i></div><div><small class="text-muted d-block text-uppercase x-small fw-bold">Modalidad</small><span class="fw-medium text-primary">{{ resumen.modalidad }}</span></div></div>
+             <div class="resumen-item d-flex gap-3"><div class="resumen-icon text-muted"><i class="bi bi-journal-medical"></i></div><div><small class="text-muted d-block text-uppercase x-small fw-bold">Especialidad</small><span class="fw-medium text-primary">{{ resumen.especialidad }}</span></div></div>
+             <div class="resumen-item d-flex gap-3"><div class="resumen-icon text-muted"><i class="bi bi-person-badge"></i></div><div><small class="text-muted d-block text-uppercase x-small fw-bold">Médico</small><span class="fw-medium text-muted">{{ resumen.medico }}</span></div></div>
+             <div class="resumen-item d-flex gap-3"><div class="resumen-icon text-muted"><i class="bi bi-calendar-event"></i></div><div><small class="text-muted d-block text-uppercase x-small fw-bold">Fecha y Hora</small><span class="fw-medium text-muted">{{ resumen.fecha }} {{ resumen.hora }}</span></div></div>
+             <hr class="my-1 border-light-subtle">
+             <div class="resumen-item d-flex gap-3"><div class="resumen-icon text-muted"><i class="bi bi-person"></i></div><div><small class="text-muted d-block text-uppercase x-small fw-bold">Paciente</small><span class="fw-medium text-dark">{{ resumen.paciente }}</span></div></div>
+             <div class="resumen-item d-flex gap-3" *ngIf="resumen.ubicacion"><div class="resumen-icon text-muted"><i class="bi bi-geo-alt text-danger"></i></div><div><small class="text-muted d-block text-uppercase x-small fw-bold">Ubicación</small><span class="fw-medium text-dark small d-block">{{ resumen.ubicacion }}</span></div></div>
+             <div class="resumen-item d-flex gap-3"><div class="resumen-icon text-muted"><i class="bi bi-credit-card"></i></div><div><small class="text-muted d-block text-uppercase x-small fw-bold">Pago</small><span class="fw-medium text-muted">{{ resumen.pago }}</span></div></div>
+             <div class="resumen-item d-flex gap-3"><div class="resumen-icon text-muted"><i class="bi bi-clipboard2-pulse"></i></div><div><small class="text-muted d-block text-uppercase x-small fw-bold">Info Médica</small><span class="fw-medium text-muted">{{ resumen.infoMedica }}</span></div></div>
           </div>
         </div>
       </div>

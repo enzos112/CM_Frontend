@@ -1,0 +1,206 @@
+<div class="container py-5">
+  
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="fw-bold text-dark mb-1">Mis Citas Médicas</h2>
+      <p class="text-muted m-0">Gestiona tus próximas atenciones y revisa tu historial.</p>
+    </div>
+    <button class="btn btn-primary rounded-pill px-4 shadow-sm" routerLink="/agendar">
+      <i class="bi bi-plus-lg me-2"></i>Nueva Cita
+    </button>
+  </div>
+
+  <div class="row g-3 mb-5">
+    <div class="col-md-3 col-6">
+      <div class="filter-card p-3 rounded-4 bg-white border shadow-sm h-100 cursor-pointer" 
+           [class.active]="filtroActual === 'TODOS'" 
+           (click)="aplicarFiltro('TODOS')">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <span class="d-block text-muted x-small fw-bold text-uppercase">Total</span>
+            <span class="fs-4 fw-bold text-dark">{{ counts.todos }}</span>
+          </div>
+          <div class="icon-circle bg-light text-dark"><i class="bi bi-collection"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 col-6">
+      <div class="filter-card p-3 rounded-4 bg-white border shadow-sm h-100 cursor-pointer" 
+           [class.active]="filtroActual === 'PENDIENTE'" 
+           (click)="aplicarFiltro('PENDIENTE')">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <span class="d-block text-muted x-small fw-bold text-uppercase">Pendientes</span>
+            <span class="fs-4 fw-bold text-warning">{{ counts.pendientes }}</span>
+          </div>
+          <div class="icon-circle bg-warning-subtle text-warning"><i class="bi bi-hourglass-split"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 col-6">
+      <div class="filter-card p-3 rounded-4 bg-white border shadow-sm h-100 cursor-pointer" 
+           [class.active]="filtroActual === 'FINALIZADO'" 
+           (click)="aplicarFiltro('FINALIZADO')">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <span class="d-block text-muted x-small fw-bold text-uppercase">Completadas</span>
+            <span class="fs-4 fw-bold text-success">{{ counts.finalizados }}</span>
+          </div>
+          <div class="icon-circle bg-success-subtle text-success"><i class="bi bi-check-lg"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 col-6">
+      <div class="filter-card p-3 rounded-4 bg-white border shadow-sm h-100 cursor-pointer" 
+           [class.active]="filtroActual === 'CANCELADO'" 
+           (click)="aplicarFiltro('CANCELADO')">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <span class="d-block text-muted x-small fw-bold text-uppercase">Canceladas</span>
+            <span class="fs-4 fw-bold text-danger">{{ counts.cancelados }}</span>
+          </div>
+          <div class="icon-circle bg-danger-subtle text-danger"><i class="bi bi-x-lg"></i></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p class="mt-3 text-muted">Cargando...</p>
+  </div>
+
+  <div *ngIf="!isLoading && citasVisibles.length === 0" class="text-center py-5 bg-light rounded-4 border border-dashed">
+    <div class="mb-3 text-muted opacity-50"><i class="bi bi-inbox fs-1"></i></div>
+    <h6 class="fw-bold text-muted">No hay citas en esta categoría</h6>
+  </div>
+
+  <div *ngIf="!isLoading && citasVisibles.length > 0" class="row g-4 fade-in">
+    <div class="col-lg-6" *ngFor="let cita of citasVisibles">
+      <div class="card h-100 border-0 shadow-sm cita-card">
+        <div class="card-body p-4">
+          <div class="d-flex gap-4">
+            <div class="date-box text-center bg-light-subtle rounded-3 p-3 d-flex flex-column justify-content-center align-items-center" style="width: 90px; height: 90px;">
+              <span class="d-block text-uppercase text-danger fw-bold x-small">{{ cita.fechaHora | date:'MMM':'':'es-ES' }}</span>
+              <span class="d-block display-6 fw-bold text-dark lh-1 my-1">{{ cita.fechaHora | date:'dd' }}</span>
+              <span class="d-block text-muted x-small">{{ cita.fechaHora | date:'HH:mm' }}</span>
+            </div>
+            <div class="flex-grow-1">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <span class="badge rounded-pill fw-normal px-3" [ngClass]="getBadgeClass(cita.estado)">{{ cita.estado }}</span>
+                <small class="text-muted fw-bold x-small text-uppercase tracking-wide"><i class="bi me-1" [ngClass]="getModalidadIcon(cita.modalidad)"></i> {{ cita.modalidad }}</small>
+              </div>
+              <h5 class="fw-bold text-dark mb-1">{{ cita.nombreMedico }}</h5>
+              <p class="text-muted small mb-2">{{ cita.especialidad }}</p>
+              
+              <div *ngIf="cita.modalidad === 'VIRTUAL' && cita.estado !== 'CANCELADO'" class="mt-3">
+                <a [href]="cita.linkReunion || '#'" target="_blank" class="btn btn-sm btn-outline-primary w-100 d-flex align-items-center justify-content-center gap-2">
+                  <i class="bi bi-camera-video-fill"></i> Unirse a Videollamada
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer bg-white border-top-0 p-3 pt-0 d-flex justify-content-between align-items-center">
+          <small class="text-muted">Paciente: <span class="fw-bold text-uppercase">{{ cita.nombrePaciente }}</span></small>
+          <button class="btn btn-link text-muted btn-sm p-0 text-decoration-none small" (click)="abrirModal(cita)">
+            Ver detalles <i class="bi bi-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="modal fade" id="detalleCitaModal" tabindex="-1" aria-hidden="true" style="background: rgba(0,0,0,0.5);">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden" *ngIf="citaSeleccionada">
+      
+      <div class="modal-header bg-primary-subtle border-bottom-0 p-4">
+        <div>
+          <h5 class="modal-title fw-bold text-dark">Detalle de Cita</h5>
+          <span class="badge mt-2" [ngClass]="getBadgeClass(citaSeleccionada.estado)">{{ citaSeleccionada.estado }}</span>
+        </div>
+        <button type="button" class="btn-close" (click)="cerrarModal()"></button>
+      </div>
+
+      <div class="modal-body p-4">
+        
+        <div class="row g-4">
+          
+          <div class="col-12 text-center mb-2">
+            <small class="text-muted text-uppercase fw-bold x-small">Código de Reserva</small>
+            <h4 class="text-dark fw-bold m-0 tracking-wide">#{{ citaSeleccionada.id }}</h4>
+          </div>
+
+          <div class="col-12"><hr class="border-light-subtle m-0"></div>
+
+          <div class="col-6">
+            <div class="d-flex gap-3">
+              <div class="text-muted"><i class="bi bi-calendar-event fs-5"></i></div>
+              <div>
+                <small class="text-muted d-block text-uppercase x-small fw-bold">Fecha</small>
+                <span class="fw-medium text-dark">{{ citaSeleccionada.fechaHora | date:'dd/MM/yyyy' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="d-flex gap-3">
+              <div class="text-muted"><i class="bi bi-clock fs-5"></i></div>
+              <div>
+                <small class="text-muted d-block text-uppercase x-small fw-bold">Hora</small>
+                <span class="fw-medium text-dark">{{ citaSeleccionada.fechaHora | date:'HH:mm a' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="d-flex gap-3">
+              <div class="text-muted"><i class="bi" [ngClass]="getModalidadIcon(citaSeleccionada.modalidad)"></i></div>
+              <div>
+                <small class="text-muted d-block text-uppercase x-small fw-bold">Modalidad</small>
+                <span class="fw-medium text-primary">{{ citaSeleccionada.modalidad }}</span>
+                <div *ngIf="citaSeleccionada.distrito" class="small text-muted mt-1">
+                  <i class="bi bi-geo-alt text-danger"></i> {{ citaSeleccionada.distrito }} - {{ citaSeleccionada.direccionExacta }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12"><hr class="border-light-subtle m-0"></div>
+
+          <div class="col-12">
+            <div class="d-flex gap-3 align-items-center">
+              <div class="rounded-circle bg-light d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+                <i class="bi bi-person-fill text-muted fs-5"></i>
+              </div>
+              <div>
+                <small class="text-muted text-uppercase fw-bold x-small">Médico Especialista</small>
+                <h6 class="fw-bold text-dark m-0">{{ citaSeleccionada.nombreMedico }}</h6>
+                <span class="text-muted small">{{ citaSeleccionada.especialidad }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="bg-light rounded-3 p-3">
+              <small class="text-muted text-uppercase fw-bold x-small d-block mb-1">Motivo de Consulta</small>
+              <p class="m-0 small text-dark fst-italic">"{{ citaSeleccionada.motivoConsulta || 'Sin especificar' }}"</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="modal-footer border-top-0 p-4 pt-0 justify-content-center">
+        <button type="button" class="btn btn-outline-secondary px-4 w-100 rounded-pill" (click)="cerrarModal()">Cerrar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
